@@ -1,0 +1,11 @@
+/* "Explore the Full 3D City" — one link under the original Platform Architecture scene */
+.cta { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 16px 40px; text-align: center; background: var(--page-background); }
+.button {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 11px 22px; border-radius: 12px;
+  font-size: 15px; font-weight: 700; color: #fff; background: var(--brand-primary); text-decoration: none;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--brand-primary) 28%, transparent); transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.button:hover { transform: translateY(-1px); box-shadow: 0 8px 22px color-mix(in srgb, var(--brand-primary) 36%, transparent); }
+.button:focus-visible { outline: 3px solid var(--text-link); outline-offset: 3px; }
+.cta p { margin: 0; max-width: 520px; font-size: 14px; line-height: 1.5; color: var(--text-muted); }
+@media (prefers-reduced-motion: reduce) { .button { transition: none; } .button:hover { transform: none; } }

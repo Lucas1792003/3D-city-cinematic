@@ -1,0 +1,63 @@
+/* Part-level owl animation. Plain CSS transforms on SVG groups (transform-box:
+   fill-box) — framer-motion's SVG transforms did not apply inside this SVG. */
+
+.part {
+  transform-box: fill-box;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Pivots */
+.wingLeft { transform-origin: 80% 8%; }
+.wingRight { transform-origin: 20% 8%; }
+.body { transform-origin: 50% 100%; }
+.head { transform-origin: 50% 90%; }
+.lid { transform-origin: 50% 0%; transition-duration: 70ms; }
+
+/* Flight: wings spread and flap */
+.flying .wingLeft { animation: flapLeft 0.32s ease-in-out infinite; }
+.flying .wingRight { animation: flapRight 0.32s ease-in-out infinite; }
+@keyframes flapLeft { 0%, 100% { transform: rotate(55deg); } 50% { transform: rotate(125deg); } }
+@keyframes flapRight { 0%, 100% { transform: rotate(-55deg); } 50% { transform: rotate(-125deg); } }
+
+/* Feet tuck up in flight */
+.flying .feet { transform: translateY(-12px); opacity: 0.85; }
+
+/* Idle: breathing and the occasional ruffle */
+.idle .body { animation: breathe 3.2s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.025); } }
+.ruffle .wingLeft { animation: ruffleLeft 0.6s ease-in-out; }
+.ruffle .wingRight { animation: ruffleRight 0.6s ease-in-out; }
+@keyframes ruffleLeft { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(14deg); } 65% { transform: rotate(6deg); } }
+@keyframes ruffleRight { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-14deg); } 65% { transform: rotate(-6deg); } }
+
+/* Talking: lower beak drops */
+.talking .beakLower { animation: talk 0.22s ease-in-out infinite; }
+@keyframes talk { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .part { transition: none; }
+  .flying .wingLeft, .flying .wingRight, .idle .body, .ruffle .wingLeft,
+  .ruffle .wingRight, .talking .beakLower { animation: none; }
+}
+
+/* Lift only the blue feather palette on the white page. Dark mode uses the
+   original SVG fallbacks; the face, eyes, beak, feet, and emblem stay intact. */
+:global(html:not(.dark)) .palette {
+  --owl-head-highlight: #588bc8;
+  --owl-head-base: #3c6ead;
+  --owl-head-shadow: #2b5186;
+  --owl-body-highlight: #4f80b9;
+  --owl-body-base: #35659e;
+  --owl-deep-shadow: #294d7b;
+  --owl-wing-base: #4779b3;
+  --owl-tail: #315789;
+  --owl-belly: #6592c4;
+  --owl-lower-feathers: #3d6a9f;
+  --owl-coverts: #6896c9;
+  --owl-wing-feathers: #37619a;
+  --owl-wing-separation: #264f7e;
+  --owl-ear: #3b6da7;
+  --owl-ear-highlight: #699bcc;
+  --owl-crown: #3d70ab;
+  --owl-rim-highlight: #87aed8;
+}

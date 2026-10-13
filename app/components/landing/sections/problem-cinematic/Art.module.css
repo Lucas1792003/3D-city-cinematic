@@ -1,0 +1,156 @@
+/* Direction C art for the persistent world: premium, rounded, dimensional, a little playful.
+   Depth comes from solid layers (extruded edges, offset shadows, oblique side faces) — no blur,
+   no glow, no gradients. Geometry, opacity and line drawing are written per frame as SVG
+   attributes, so these classes never set opacity or stroke-dashoffset. */
+
+.world {
+  /* Local tints of the brand palette, tuned per theme */
+  --edge: #d6e2ed;
+  --edge-deep: #bfd0df;
+  --shade: rgba(15, 31, 47, 0.07);
+  --blue-soft: #dcf0fb;
+  --blue-mid: #9fd6f2;
+  --face-side: #d3dfea;
+  --face-top: #f1f6fa;
+  --blue-side: #7dc4e9;
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-family: inherit;
+}
+:global(.dark) .world {
+  --edge: #0b1622;
+  --edge-deep: #07111b;
+  --shade: rgba(0, 0, 0, 0.34);
+  --blue-soft: #123a52;
+  --blue-mid: #1f6d96;
+  --face-side: #0e1b28;
+  --face-top: #2a4157;
+  --blue-side: #17506f;
+}
+
+.floorDot { fill: var(--border-default); }
+.shade { fill: var(--shade); }
+.edge { fill: var(--edge); }
+.edgeDeep { fill: var(--edge-deep); }
+.surface { fill: var(--lp-card); stroke: var(--border-default); stroke-width: 1.5; }
+.surfacePlain { fill: var(--lp-card); }
+.inset { fill: var(--lp-inset); }
+.side { fill: var(--face-side); }
+.sideDeep { fill: var(--face-side); }
+.top { fill: var(--face-top); }
+.blueSide { fill: var(--blue-side); }
+.tierLine { fill: none; stroke: var(--brand-primary); stroke-width: 2; stroke-opacity: 0.55; }
+.blue { fill: var(--brand-primary); }
+.blueSoft { fill: var(--blue-soft); }
+.blueMid { fill: var(--blue-mid); }
+.blueDeep { fill: var(--text-link); }
+.orange { fill: var(--accent-emphasis); }
+.orangeSoft { fill: var(--accent-emphasis-bg); }
+.mark { fill: var(--border-strong); }
+.white { fill: #fff; }
+
+/* Signals */
+.signal { stroke: var(--border-strong); stroke-linecap: round; fill: none; }
+.signalRisk { stroke: var(--accent-emphasis); stroke-linecap: round; fill: none; }
+.priority { fill: none; stroke: var(--brand-primary); stroke-width: 3; }
+
+/* Text */
+.counterNum { fill: var(--text-primary); font-size: 46px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.counterLabel { fill: var(--text-muted); font-size: 15px; font-weight: 600; letter-spacing: 0.04em; }
+.counterRisk { fill: var(--accent-emphasis-text); }
+.caps { fill: var(--text-muted); font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.capsWide { fill: var(--text-muted); font-size: 17px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.label { fill: var(--text-muted); font-size: 12px; font-weight: 700; }
+.title { fill: var(--text-primary); font-size: 24px; font-weight: 800; }
+.titleSmall { fill: var(--text-muted); font-size: 12px; font-weight: 800; }
+.lineNo { fill: var(--text-muted); font-size: 7px; font-weight: 500; }
+.coreLabel { fill: var(--text-link); font-size: 16px; font-weight: 800; letter-spacing: 0.06em; }
+.unifiedLabel { fill: var(--text-link); font-size: 28px; font-weight: 800; letter-spacing: 0.08em; }
+.explainedText { fill: var(--text-link); font-size: 17px; font-weight: 800; }
+.tagText { fill: var(--text-muted); font-size: 7.5px; font-weight: 700; }
+.glyph { fill: var(--text-muted); font-size: 12px; font-weight: 800; }
+.glyphWide { fill: var(--text-muted); font-size: 22px; font-weight: 800; }
+.bubbleText { fill: #fff; font-size: 40px; font-weight: 900; }
+
+/* Connectors: a few strong ones, not a web of hairlines */
+.beads { fill: none; stroke: var(--border-strong); stroke-width: 6; stroke-dasharray: 0.1 13; stroke-linecap: round; }
+.beadsWide { fill: none; stroke: var(--border-strong); stroke-width: 9; stroke-dasharray: 0.1 20; stroke-linecap: round; }
+.link { fill: none; stroke: var(--brand-primary); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1; }
+.linkWide { fill: none; stroke: var(--brand-primary); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 1; }
+.riskPath { fill: none; stroke: var(--accent-emphasis); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1; }
+.trace { fill: none; stroke: var(--accent-emphasis); stroke-width: 5; stroke-linecap: round; }
+.hint { fill: none; stroke: var(--brand-primary); stroke-width: 2; stroke-dasharray: 0.1 9; stroke-linecap: round; }
+.spoke { fill: none; stroke: var(--brand-primary); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1; }
+.chip { fill: var(--lp-card); stroke: var(--border-strong); stroke-width: 1.6; }
+
+/* Code */
+.panel { fill: var(--lp-card); stroke: var(--border-default); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.code { stroke: var(--border-strong); stroke-linecap: round; fill: none; stroke-opacity: 0.55; }
+.codeAi { stroke: var(--brand-primary); stroke-linecap: round; fill: none; }
+.squiggle { fill: none; stroke: var(--accent-emphasis); stroke-width: 1.6; stroke-linecap: round; }
+.scanLine { fill: var(--text-muted); }
+.scanBand { fill: var(--text-muted); fill-opacity: 0.1; }
+.tag { fill: var(--lp-inset); stroke: var(--border-strong); stroke-width: 0.6; }
+.tagCheck { fill: none; stroke: var(--text-muted); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.bugRing { fill: var(--accent-emphasis-bg); stroke: var(--accent-emphasis); stroke-width: 2.2; }
+.bugLegs { fill: none; stroke: var(--accent-emphasis); stroke-width: 2.2; stroke-linecap: round; }
+
+/* Tools, plates and CyfroSec */
+.plate { fill: var(--lp-inset); fill-opacity: 0.8; }
+.unifiedFill { fill: var(--brand-primary); fill-opacity: 0.05; }
+.unified { fill: none; stroke: var(--brand-primary); stroke-width: 4; stroke-dasharray: 1; }
+.unifiedEdge { fill: none; stroke: var(--brand-primary); stroke-width: 4; stroke-opacity: 0.3; }
+.coreTop { fill: var(--lp-card); stroke: var(--brand-primary); stroke-width: 3; }
+.coreRing { fill: var(--blue-soft); stroke: var(--brand-primary); stroke-width: 3; }
+.explained { fill: var(--lp-card); stroke: var(--brand-primary); stroke-width: 3; }
+.checkStroke { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* The owl's own SVG, sized in world units */
+.owlSvg { overflow: visible; }
+.bubbleRisk { fill: var(--accent-emphasis); }
+.bubbleQuestion { fill: var(--lp-card); stroke: var(--border-strong); stroke-width: 4; }
+.bubbleQuestionText { fill: var(--text-muted); font-size: 40px; font-weight: 900; }
+.bubbleGood { fill: var(--brand-primary); }
+
+/* Ports, risk flow and chips (Act 4 → 5) */
+.portGrey { fill: var(--lp-card); stroke: var(--border-strong); stroke-width: 3; }
+.portBlue { fill: var(--lp-card); stroke: var(--brand-primary); stroke-width: 4; }
+.beadHalo { fill: var(--accent-emphasis-bg); stroke: var(--accent-emphasis); stroke-width: 2; }
+.tracedRing { fill: none; stroke: var(--accent-emphasis); stroke-width: 3.5; }
+.riskChip { fill: var(--accent-emphasis-bg); stroke: var(--accent-emphasis); stroke-width: 2; }
+.riskChipText { fill: var(--accent-emphasis-text); font-size: 16px; font-weight: 800; }
+
+/* Act 5 handover: the owl's chest emblem is hidden while it carries it (no edit to the owl files) */
+.carrying [data-part='emblem'] { opacity: 0; }
+.socket { fill: var(--edge); stroke: var(--brand-primary); stroke-width: 1.5; stroke-opacity: 0.5; }
+.orbBack { fill: var(--lp-card); stroke: var(--brand-primary); stroke-width: 2; }
+.snapWave { fill: none; stroke: var(--brand-primary); stroke-width: 3; }
+
+/* Act 5 connection architecture */
+.primary { fill: none; stroke: var(--brand-primary); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1; }
+.secondary { fill: none; stroke: var(--blue-mid); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 9 9; }
+.secondaryLine { fill: none; stroke: var(--blue-mid); stroke-width: 3; stroke-linecap: round; }
+.blueMuted { fill: var(--blue-mid); }
+.signalHalo { fill: var(--blue-soft); stroke: var(--brand-primary); stroke-width: 2; }
+.envPlate { fill: var(--brand-primary); fill-opacity: 0.06; stroke: var(--brand-primary); stroke-opacity: 0.25; stroke-width: 2; }
+.envLabel { fill: var(--text-link); font-size: 17px; font-weight: 800; letter-spacing: 0.06em; }
+.miniLabel { fill: var(--text-muted); font-size: 16px; font-weight: 700; }
+.cardTitle { fill: var(--text-primary); font-size: 20px; font-weight: 800; }
+.teamCard { fill: var(--lp-card); stroke: var(--brand-primary); stroke-width: 3; }
+.tagWhite { fill: #fff; font-size: 16px; font-weight: 800; }
+.analyzedRing { fill: none; stroke: var(--brand-primary); stroke-width: 4; }
+.statusChip { fill: var(--lp-card); stroke: var(--brand-primary); stroke-width: 2.5; }
+.statusText { fill: var(--text-link); font-size: 16px; font-weight: 800; }
+.doneLabel { fill: var(--text-link); font-size: 30px; font-weight: 800; }
+.tagBig { fill: #fff; font-size: 26px; font-weight: 800; }
+
+/* Final scene: monitored sources, ranked finding rows, analysis pill */
+.monitorRing { fill: none; stroke: var(--brand-primary); stroke-width: 2.5; stroke-opacity: 0.35; }
+.monitorBadge { fill: var(--lp-card); stroke: var(--brand-primary); stroke-width: 3; }
+.rowCard { fill: var(--lp-card); stroke: var(--accent-emphasis); stroke-width: 3; }
+.tagRow { fill: #fff; font-size: 17px; font-weight: 800; }
+.rowLabel { fill: var(--text-primary); font-size: 21px; font-weight: 800; }
+.checkSmall { fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.shieldCheck { fill: none; stroke: var(--brand-primary); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.shieldCheckWhite { fill: none; stroke: #fff; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }

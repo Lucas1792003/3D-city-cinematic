@@ -1,0 +1,1440 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+html, body {
+  /* Clip horizontal overflow without creating a second scrolling container. */
+  overflow-x: clip;
+}
+
+html {
+  /* Apply boundary control only to the document's scrolling container. */
+  overscroll-behavior-y: none;
+}
+
+/* The transparent gap at 68% separates the blue wordmark from the orange
+   tagline in logo.png. Reuse its alpha mask to match the primary button blue
+   without changing antialiased edges, the tagline, or the dark-mode asset. */
+.cy-themed-logo {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+html:not(.dark) .cy-themed-logo > img {
+  clip-path: inset(68% 0 0);
+}
+
+.cy-themed-logo-blue {
+  display: none;
+}
+
+html:not(.dark) .cy-themed-logo-blue {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--btn-primary-bg, #039be0);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  clip-path: inset(0 0 32%);
+}
+
+/* ── Arabic font: applied to any element that carries dir="rtl" directly,
+      and inherited by all its descendants. Layout containers are never
+      given dir="rtl", so flex/grid layout is never affected. ── */
+[dir="rtl"] {
+  font-family: var(--font-arabic), 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+}
+
+/* ── Arabic sizing: Noto Sans Arabic has a larger optical weight than the
+      Latin typeface at the same px size. The element+attribute selector
+      (0,1,1) beats any Tailwind utility class (0,1,0), so these rules win
+      at every breakpoint without !important. Only elements we explicitly
+      tag dir="rtl" are affected — layout containers never are. ── */
+
+/* Section h2 headings — ~10% reduction per breakpoint */
+h2[dir="rtl"] {
+  font-size: 1.35rem;   /* text-2xl = 1.5rem */
+  line-height: 1.25;
+}
+@media (min-width: 640px)  { h2[dir="rtl"] { font-size: 1.7rem; } }   /* text-3xl = 1.875rem */
+@media (min-width: 768px)  { h2[dir="rtl"] { font-size: 2rem; } }     /* text-4xl = 2.25rem */
+@media (min-width: 1024px) { h2[dir="rtl"] { font-size: 2.7rem; } }   /* text-5xl = 3rem */
+@media (min-width: 1920px) { h2[dir="rtl"] { font-size: 3.375rem; } } /* text-6xl = 3.75rem */
+
+/* h3 sub-headings — ~8% reduction for the responsive sizes used in
+   Highlights (text-xl/2xl/3xl) and Personas */
+h3[dir="rtl"] {
+  font-size: 1.04rem;   /* text-lg = 1.125rem */
+  line-height: 1.3;
+}
+@media (min-width: 640px)  { h3[dir="rtl"] { font-size: 1.15rem; } }  /* text-xl = 1.25rem */
+@media (min-width: 768px)  { h3[dir="rtl"] { font-size: 1.38rem; } }  /* text-2xl = 1.5rem */
+@media (min-width: 1024px) { h3[dir="rtl"] { font-size: 1.73rem; } }  /* text-3xl = 1.875rem */
+@media (min-width: 1920px) { h3[dir="rtl"] { font-size: 2.07rem; } }  /* text-4xl = 2.25rem */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Extra breakpoints for large monitors & TVs ── */
+@custom-variant 3xl (@media (width >= 1920px));
+@custom-variant 4xl (@media (width >= 2560px));
+
+/* ── Landing Page Animations ── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-slideUp { animation: slideUp 0.25s ease-out; }
+
+@keyframes packetLtr {
+  0%   { left: -4px; opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { left: calc(100% + 4px); opacity: 0; }
+}
+.anim-packet-ltr {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: packetLtr 2s ease-in-out infinite;
+}
+
+@keyframes slideOutLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-60px); }
+}
+@keyframes slideOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(60px); }
+}
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInFromLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.anim-slide-out-left  { animation: slideOutLeft    0.22s ease-in  forwards; }
+.anim-slide-out-right { animation: slideOutRight   0.22s ease-in  forwards; }
+.anim-slide-in-right  { animation: slideInFromRight 0.28s ease-out forwards; }
+.anim-slide-in-left   { animation: slideInFromLeft  0.28s ease-out forwards; }
+
+@keyframes priceFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-priceFade { animation: priceFade 0.18s ease-out; }
+
+@keyframes dropdown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-dropdown { animation: dropdown 0.15s ease-out; }
+.animate-slideDown { animation: slideDown 0.2s ease-out; }
+
+/* ── Hero Animated Title ── */
+.animated-title {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  opacity: 0;
+  transform: translateY(150px);
+}
+.animated-title.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.animated-title.above {
+  opacity: 0;
+  transform: translateY(-150px);
+}
+.animated-title.below {
+  opacity: 0;
+  transform: translateY(150px);
+}
+
+/* ── Announcement banner ticker ── */
+@keyframes banner-ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+/* Stays still for 5 s (animation-delay), then scrolls left in a seamless loop.
+   The inner element must contain two identical copies of the text side-by-side
+   so that -50% equals exactly one copy width — giving a gapless loop. */
+.banner-ticker {
+  will-change: transform;
+  animation: banner-ticker 22s linear 5s infinite;
+}
+
+/* The second (ghost) copy is invisible during the 5 s idle phase so it
+   doesn't show beside the first copy on wide screens. It becomes visible
+   in the same instant the parent starts moving, staying visible forever. */
+@keyframes banner-ticker-ghost-reveal {
+  to { opacity: 1; }
+}
+.banner-ticker-ghost {
+  opacity: 0;
+  animation: banner-ticker-ghost-reveal 1ms linear 5s forwards;
+}
+
+/* ── Respect prefers-reduced-motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-ping,
+  .animate-pulse,
+  .anim-packet-ltr,
+  .anim-slide-out-left,
+  .anim-slide-out-right,
+  .anim-slide-in-right,
+  .anim-slide-in-left,
+  .animate-slideUp,
+  .banner-ticker {
+    animation: none !important;
+    transition: none !important;
+  }
+  /* With no ticker, both copies would show statically — hide the ghost copy */
+  .banner-ticker-ghost {
+    display: none !important;
+  }
+}
+
+/* ── GlowingEffect ── */
+.glow {
+  position: relative;
+}
+.glow::after {
+  content: "";
+}
+
+/* ── Brand Utilities ── */
+.text-gradient {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Navbar overrides for landing ── */
+.cy-navbar-root,
+.cy-navbar-shell,
+.cy-navbar-offset {
+  background-color: var(--hero-bg, var(--color-surface-950)) !important;
+}
+
+.cy-navbar-shell.cy-navbar-shell-scrolled {
+  background-color: transparent !important;
+}
+
+.cy-navbar-root:has(.cy-navbar-shell-scrolled) {
+  background-color: transparent !important;
+}
+
+.cy-navbar-root,
+.cy-navbar-shell {
+  color: var(--text-sidebar-strong);
+}
+
+.cy-navbar-nav .cy-navbar-link,
+.cy-navbar-actions .cy-navbar-strong,
+.cy-navbar-mobile-toggle .cy-navbar-ghost {
+  color: var(--text-sidebar-strong) !important;
+}
+
+.cy-navbar-actions .cy-navbar-muted {
+  color: var(--text-sidebar) !important;
+}
+
+.cy-navbar-nav .cy-navbar-link:hover,
+.cy-navbar-actions .cy-navbar-ghost:hover,
+.cy-navbar-mobile-toggle .cy-navbar-ghost:hover {
+  color: var(--text-inverse) !important;
+}
+
+.cy-navbar-actions > button,
+.cy-navbar-mobile-toggle > button {
+  color: var(--text-sidebar-strong) !important;
+}
+
+.cy-navbar-actions > button svg,
+.cy-navbar-mobile-toggle > button svg,
+.cy-navbar-nav svg {
+  color: currentColor;
+  stroke: currentColor;
+}
+
+.cy-navbar-divider {
+  background-color: rgb(255 255 255 / 0.18) !important;
+}
+
+.cy-navbar-actions > button {
+  border-color: rgb(255 255 255 / 0.18) !important;
+  background-color: rgb(255 255 255 / 0.06) !important;
+}
+
+.cy-navbar-mobile-toggle > button:first-child {
+  border-color: rgb(255 255 255 / 0.18) !important;
+  background-color: rgb(255 255 255 / 0.06) !important;
+}
+
+.cy-navbar-nav .cy-navbar-hover-bg {
+  background-color: rgb(255 255 255 / 0.08) !important;
+}
+
+.cy-navbar-dropdown {
+  background-color: var(--hero-bg, var(--color-surface-950)) !important;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.35);
+}
+
+.cy-navbar-dropdown-label {
+  color: rgb(255 255 255 / 0.62) !important;
+}
+
+.cy-navbar-dropdown-title {
+  color: rgb(255 255 255 / 0.94) !important;
+}
+
+.cy-navbar-dropdown-desc {
+  color: rgb(255 255 255 / 0.68) !important;
+}
+
+.cy-navbar-dropdown-icon {
+  background-color: rgb(255 255 255 / 0.04) !important;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  color: rgb(255 255 255 / 0.9) !important;
+}
+
+.cy-navbar-dropdown-item {
+  background-color: transparent;
+}
+
+.cy-navbar-dropdown-item:hover,
+.cy-navbar-dropdown-item:focus-visible,
+.cy-navbar-dropdown-item[data-active="true"] {
+  background-color: rgb(255 255 255 / 0.06) !important;
+}
+
+.cy-navbar-dropdown-item:hover .cy-navbar-dropdown-title,
+.cy-navbar-dropdown-item:focus-visible .cy-navbar-dropdown-title {
+  color: var(--text-inverse) !important;
+}
+
+.cy-navbar-dropdown-item:hover .cy-navbar-dropdown-desc,
+.cy-navbar-dropdown-item:focus-visible .cy-navbar-dropdown-desc {
+  color: rgb(255 255 255 / 0.78) !important;
+}
+
+.cy-navbar-dropdown svg {
+  color: currentColor;
+  stroke: currentColor;
+}
+
+/* ── Card Enterprise ── */
+.card-enterprise {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-default);
+  border-radius: 1rem;
+  transition: border-color var(--shell-duration, 200ms) ease,
+    box-shadow var(--shell-duration, 200ms) ease;
+}
+.card-enterprise:hover {
+  border-color: var(--color-primary-400);
+  box-shadow: 0 4px 24px color-mix(in srgb, var(--brand-primary) 10%, transparent);
+}
+
+/* ── Glass Panel ── */
+.glass-panel {
+  background: color-mix(in srgb, var(--bg-panel) 80%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--border-default) 50%, transparent);
+}
+
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton-react';
+@import '@skeletonlabs/skeleton/themes/cerberus';
+@import './theme-cyfrosec.css';
+
+/* ── shadcn color token bridge ──────────────────────────────────────────────
+   Maps shadcn/Tailwind utility classes (bg-muted, text-foreground, etc.)
+   to this project's runtime CSS variables so third-party shadcn components
+   pick up the correct theme colours automatically in light and dark mode.   */
+@theme inline {
+  --color-background:           var(--bg-canvas);
+  --color-foreground:           var(--text-primary);
+  --color-muted:                var(--bg-muted);
+  --color-muted-foreground:     var(--text-muted);
+  --color-border:               var(--border-default);
+  --color-input:                var(--border-default);
+  --color-ring:                 var(--color-primary-500);
+  --color-primary:              var(--color-primary-500);
+  --color-primary-foreground:   #ffffff;
+  --color-secondary:            var(--bg-muted);
+  --color-secondary-foreground: var(--text-secondary);
+  --color-accent:               var(--interactive-hover);
+  --color-accent-foreground:    var(--text-primary);
+  --color-popover:              var(--bg-elevated);
+  --color-popover-foreground:   var(--text-primary);
+  --color-card:                 var(--bg-elevated);
+  --color-card-foreground:      var(--text-primary);
+}
+
+/* ── Page background ─────────────────────────────────────────────────────────
+   One continuous background for every marketing page, light and dark. Cards and
+   panels stay distinct through their own surface tokens. Also feeds the top
+   navbar so it never forms a band of a different colour. */
+:root {
+  --page-background: #ffffff;
+  --hero-bg: var(--page-background);
+}
+.dark {
+  --page-background: #0d1b29;
+}
+
+/* ── Landing semantic colours ───────────────────────────────────────────────
+   `lp-*` utilities (bg-lp-canvas, text-lp-body, border-lp-border, …) resolve
+   to the theme-aware tokens defined on the landing wrapper in
+   app/landing-theme.module.css. They only have values inside that wrapper.  */
+@theme inline {
+  --color-lp-canvas:        var(--bg-canvas);
+  --color-lp-page:          var(--page-background);
+  --color-lp-surface:       var(--bg-elevated);
+  --color-lp-surface-2:     var(--bg-surface-secondary);
+  --color-lp-alt:           var(--bg-section-alt);
+  --color-lp-card:          var(--lp-card);
+  --color-lp-inset:         var(--lp-inset);
+  --color-lp-heading:       var(--text-primary);
+  --color-lp-body:          var(--text-body);
+  --color-lp-muted:         var(--text-muted);
+  --color-lp-brand:         var(--brand-primary);
+  --color-lp-brand-text:    var(--text-brand);
+  --color-lp-link:          var(--text-link);
+  --color-lp-link-hover:    var(--text-link-hover);
+  --color-lp-accent:        var(--accent-emphasis);
+  --color-lp-accent-text:   var(--accent-emphasis-text);
+  --color-lp-accent-bg:     var(--accent-emphasis-bg);
+  --color-lp-cta:           var(--cta-bg);
+  --color-lp-cta-hover:     var(--cta-bg-hover);
+  --color-lp-on-cta:        var(--cta-text);
+  --color-lp-icon-bg:       var(--icon-bg);
+  --color-lp-icon:          var(--icon-fg);
+  --color-lp-border:        var(--border-default);
+  --color-lp-border-hover:  var(--border-hover);
+  --color-lp-border-strong: var(--border-strong);
+  --color-lp-critical:      var(--severity-critical-text);
+  --color-lp-success:       var(--status-success-text);
+  --color-lp-hero-eyebrow:  var(--hero-eyebrow);
+  --color-lp-hero-headline: var(--hero-headline);
+}
+
+/* ─── Base ─── */
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+/* ─── Typography ─── */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-heading {
+  @apply font-semibold tracking-tight text-surface-900 dark:text-surface-50;
+  font-family: var(--font-sans);
+}
+
+.font-mono,
+code,
+pre {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+}
+
+/* ─── Components Ported to New Theme ─── */
+
+/* Inputs - Matching Hero/Skeleton */
+.select,
+.input,
+.textarea,
+.ig-input,
+.ig-select {
+  background-color: var(--bg-elevated);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+  @apply rounded-lg border px-3 py-2 text-sm shadow-sm transition-all outline-none;
+}
+
+.select:focus,
+.input:focus,
+.textarea:focus,
+.ig-input:focus,
+.ig-select:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+/* Cards - Matching Hero .card-enterprise */
+.cy-card {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-card);
+  @apply rounded-xl transition-all duration-200;
+}
+
+.cy-card-interactive:hover {
+  @apply ring-1 ring-primary-500/20 shadow-md;
+}
+
+/* Glass - Simplified for "Bright" theme (less blur, more solid) */
+.cy-glass {
+  background-color: color-mix(in srgb, var(--bg-elevated) 82%, transparent);
+  border: 1px solid var(--border-default);
+  @apply backdrop-blur-md;
+}
+
+.cy-glass-elevated {
+  background-color: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-card);
+  @apply backdrop-blur-xl;
+}
+
+/* Status Dots */
+.cy-status-dot {
+  @apply inline-block h-2 w-2 rounded-full shrink-0;
+}
+
+.cy-status-dot-success {
+  @apply bg-success-500 shadow-[0_0_10px] shadow-success-500/60;
+}
+
+.cy-status-dot-warning {
+  @apply bg-warning-500 shadow-[0_0_10px] shadow-warning-500/60;
+}
+
+.cy-status-dot-error {
+  @apply bg-error-500 shadow-[0_0_10px] shadow-error-500/60;
+}
+
+.cy-status-dot-info {
+  @apply bg-primary-500 shadow-[0_0_10px] shadow-primary-500/60;
+}
+
+.cy-status-dot-neutral {
+  @apply bg-surface-500;
+}
+
+/* ─── Dark mode vivid status dot overrides ─── */
+.dark .cy-status-dot-success {
+  background-color: var(--color-success-400);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-success-400) 72%, transparent);
+}
+
+.dark .cy-status-dot-warning {
+  background-color: var(--color-warning-400);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-warning-400) 68%, transparent);
+}
+
+.dark .cy-status-dot-error {
+  background-color: var(--color-error-400);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-error-400) 72%, transparent);
+}
+
+.dark .cy-status-dot-info {
+  background-color: var(--color-info-400);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-info-400) 72%, transparent);
+}
+
+/* Badges */
+.cy-badge {
+  @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap border;
+}
+
+.cy-badge-success {
+  @apply bg-success-500/18 text-success-600 dark:text-success-400 border-success-500/35;
+}
+
+.cy-badge-warning {
+  @apply bg-warning-500/18 text-warning-600 dark:text-warning-400 border-warning-500/40;
+}
+
+.cy-badge-error {
+  @apply bg-error-500/18 text-error-600 dark:text-error-400 border-error-500/40;
+}
+
+.cy-badge-info {
+  @apply bg-primary-500/18 text-primary-600 dark:text-primary-400 border-primary-500/35;
+}
+
+.cy-badge-neutral {
+  @apply bg-surface-500/18 text-surface-600 dark:text-surface-300 border-surface-500/30;
+}
+
+.cy-badge-critical {
+  @apply bg-error-500/22 text-error-600 dark:text-error-400 border-error-500/45;
+}
+
+/* ─── Dark mode vivid badge overrides ─── */
+/* Increase saturation & opacity at dark canvas for clear readability */
+.dark .cy-badge-success {
+  background-color: color-mix(in srgb, var(--color-success-400) 22%, transparent);
+  color: var(--color-success-400);
+  border-color: color-mix(in srgb, var(--color-success-400) 50%, transparent);
+}
+
+.dark .cy-badge-warning {
+  background-color: color-mix(in srgb, var(--color-warning-400) 22%, transparent);
+  color: var(--color-warning-400);
+  border-color: color-mix(in srgb, var(--color-warning-400) 50%, transparent);
+}
+
+.dark .cy-badge-error {
+  background-color: color-mix(in srgb, var(--color-error-400) 22%, transparent);
+  color: var(--color-error-400);
+  border-color: color-mix(in srgb, var(--color-error-400) 55%, transparent);
+}
+
+.dark .cy-badge-critical {
+  background-color: color-mix(in srgb, var(--color-error-400) 26%, transparent);
+  color: #fca5a5;
+  border-color: color-mix(in srgb, var(--color-error-400) 60%, transparent);
+}
+
+.dark .cy-badge-info {
+  background-color: color-mix(in srgb, var(--color-info-400) 20%, transparent);
+  color: var(--color-info-400);
+  border-color: color-mix(in srgb, var(--color-info-400) 48%, transparent);
+}
+
+.dark .cy-badge-neutral {
+  background-color: var(--bg-muted);
+  color: var(--text-secondary);
+  border-color: var(--border-default);
+}
+
+/* Buttons */
+.cy-btn {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed border;
+}
+
+.cy-btn-primary {
+  @apply bg-primary-600 text-white border-primary-600 hover:bg-primary-700 hover:border-primary-700 shadow-sm;
+}
+
+.dark .cy-btn-primary {
+  background-color: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.dark .cy-btn-primary:hover {
+  background-color: var(--color-primary-400);
+  border-color: var(--color-primary-400);
+}
+
+.cy-btn-secondary {
+  background-color: var(--bg-elevated);
+  color: var(--text-secondary);
+  border-color: var(--border-default);
+}
+
+.cy-btn-secondary:hover {
+  background-color: var(--interactive-hover);
+}
+
+.cy-btn-ghost {
+  color: var(--text-muted);
+  @apply bg-transparent border-transparent;
+}
+
+.cy-btn-ghost:hover {
+  background-color: var(--interactive-hover);
+  color: var(--text-secondary);
+}
+
+.cy-btn-danger {
+  @apply bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400 border-error-200 dark:border-error-800/30 hover:bg-error-100 dark:hover:bg-error-900/40;
+}
+
+.cy-btn-sm {
+  @apply px-3 py-1.5 text-xs;
+}
+
+.cy-btn-lg {
+  @apply px-5 py-2.5 text-base;
+}
+
+/* Navigation */
+.cy-nav-link {
+  color: var(--text-muted);
+  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors;
+}
+
+.cy-nav-link:hover {
+  background-color: var(--interactive-hover);
+  color: var(--text-primary);
+}
+
+.cy-nav-link-active {
+  @apply bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-400 relative;
+}
+
+.cy-nav-link-active::before {
+  content: '';
+  @apply absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[60%] rounded-r-sm bg-primary-500;
+}
+
+/* ─── Enterprise Sidebar ─── */
+
+.cy-shell-brand {
+  position: relative;
+  width: var(--cy-sidebar-width, 256px);
+  height: var(--cy-header-height, 56px);
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-default);
+  overflow: hidden;
+  isolation: isolate;
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bg-elevated) 95%, var(--color-primary-100) 5%),
+    color-mix(in srgb, var(--bg-elevated) 99%, var(--color-primary-50) 1%)
+  );
+}
+
+.dark .cy-shell-brand {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bg-elevated) 84%, #071527 16%),
+    color-mix(in srgb, var(--bg-elevated) 97%, #020c18 3%)
+  );
+}
+
+.cy-shell-brand-link {
+  @apply flex h-full w-full items-center justify-start;
+  padding-inline: var(--cy-rail-padding, 12px);
+  transition: background-color 200ms ease;
+}
+
+.cy-shell-brand-link:hover {
+  background-color: color-mix(in srgb, var(--interactive-hover) 60%, transparent);
+}
+
+.cy-shell-brand-link-collapsed {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.cy-shell-brand-logo {
+  @apply flex shrink-0 items-center justify-center;
+}
+
+.cy-shell-brand-logo-collapsed {
+  @apply p-0;
+  background: none;
+  box-shadow: none;
+}
+
+.cy-sidebar {
+  background-color: var(--bg-elevated);
+  border-right: 1px solid var(--border-default);
+  box-shadow: 4px 0 24px -12px rgba(15, 23, 42, 0.06);
+  transition-property: width, transform;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .cy-sidebar {
+  box-shadow: 4px 0 32px -12px rgba(0, 0, 0, 0.35);
+}
+
+.cy-sidebar-backdrop {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 200ms ease-out;
+}
+
+.cy-sidebar-glow {
+  @apply absolute inset-x-0 top-0 h-40 pointer-events-none;
+  background: linear-gradient(
+    180deg,
+    rgba(3, 155, 224, 0.05) 0%,
+    transparent 100%
+  );
+}
+
+.dark .cy-sidebar-glow {
+  background: linear-gradient(
+    180deg,
+    rgba(34, 211, 238, 0.10) 0%,
+    transparent 100%
+  );
+}
+
+.cy-sidebar-header {
+  @apply relative flex h-14 items-center border-b shrink-0;
+  border-color: var(--border-default);
+}
+
+.cy-sidebar-logo-icon {
+  @apply flex size-9 items-center justify-center rounded-xl;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+  box-shadow: 0 4px 14px rgba(3, 155, 224, 0.38);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.cy-sidebar-logo-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(3, 155, 224, 0.55);
+}
+
+.cy-sidebar-nav {
+  @apply flex-1 overflow-y-auto overflow-x-hidden py-4;
+}
+
+.cy-sidebar-section-label {
+  @apply mb-2 overflow-hidden;
+  transition: height 300ms ease, opacity 300ms ease;
+  height: 1.25rem;
+  opacity: 1;
+}
+
+.cy-sidebar-section-label-hidden {
+  height: 0;
+  opacity: 0;
+}
+
+.cy-sidebar-section-divider {
+  @apply mx-auto mb-3 rounded-full;
+  width: 2rem;
+  height: 1px;
+  background-color: var(--border-default);
+}
+
+/* ─── Sidebar link ─── */
+
+.cy-sidebar-link {
+  @apply relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium cursor-pointer;
+  color: var(--text-muted);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cy-sidebar-link:hover {
+  background-color: var(--interactive-hover);
+  color: var(--text-primary);
+}
+
+.cy-sidebar-link:hover .cy-sidebar-link-icon {
+  color: var(--text-primary);
+  transform: scale(1.08);
+}
+
+.cy-sidebar-link:active {
+  background-color: var(--interactive-active);
+  transform: scale(0.98);
+}
+
+.cy-sidebar-link-collapsed {
+  @apply justify-center px-0 py-1;
+  background: transparent !important;
+}
+
+.cy-sidebar-link-collapsed::before {
+  display: none !important;
+}
+
+.cy-sidebar-link-active {
+  color: var(--color-primary-700);
+  background: linear-gradient(135deg, rgba(3, 155, 224, 0.11), rgba(3, 155, 224, 0.05));
+}
+
+.dark .cy-sidebar-link-active {
+  color: var(--text-brand);
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(34, 211, 238, 0.06));
+}
+
+.cy-sidebar-link-active:hover {
+  color: var(--color-primary-700);
+  background: linear-gradient(135deg, rgba(3, 155, 224, 0.15), rgba(3, 155, 224, 0.07));
+}
+
+.dark .cy-sidebar-link-active:hover {
+  color: var(--text-brand);
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.22), rgba(34, 211, 238, 0.09));
+}
+
+/* Active indicator bar */
+.cy-sidebar-link-active::before {
+  content: '';
+  @apply absolute left-0 top-1/2 -translate-y-1/2 rounded-r-full;
+  width: 3px;
+  height: 55%;
+  background: linear-gradient(180deg, var(--color-primary-400), var(--color-primary-600));
+  box-shadow: 0 0 10px rgba(3, 155, 224, 0.55);
+}
+
+.dark .cy-sidebar-link-active::before {
+  background: linear-gradient(180deg, var(--color-info-400), var(--color-primary-400));
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.65);
+}
+
+.cy-sidebar-link-collapsed.cy-sidebar-link-active::before {
+  height: 40%;
+}
+
+/* ─── Sidebar link icon ─── */
+
+.cy-sidebar-link-icon {
+  @apply flex-shrink-0;
+  color: var(--text-muted);
+  transition: color 200ms ease, transform 200ms ease;
+}
+
+.cy-sidebar-link-icon-active {
+  color: var(--color-primary-500);
+}
+
+.dark .cy-sidebar-link-icon-active {
+  color: var(--text-brand);
+}
+
+/* Icon container for collapsed mode */
+.cy-sidebar-link-icon-container {
+  @apply flex size-10 items-center justify-center rounded-xl;
+  transition: all 200ms ease;
+}
+
+.cy-sidebar-link:hover .cy-sidebar-link-icon-container {
+  background-color: var(--interactive-hover);
+}
+
+.cy-sidebar-link-active .cy-sidebar-link-icon-container {
+  background: linear-gradient(135deg, rgba(3, 155, 224, 0.15), rgba(3, 155, 224, 0.06));
+  box-shadow: 0 0 0 1px rgba(3, 155, 224, 0.18);
+}
+
+.dark .cy-sidebar-link-active .cy-sidebar-link-icon-container {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.20), rgba(34, 211, 238, 0.08));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.25);
+}
+
+/* ─── Sidebar link label ─── */
+
+.cy-sidebar-link-label {
+  @apply inline-flex items-center gap-1.5 whitespace-nowrap;
+  overflow: hidden;
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 250ms ease,
+              margin-left 300ms ease;
+}
+
+/* ─── Sidebar tooltip ─── */
+
+.cy-sidebar-tooltip {
+  @apply absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap z-[60];
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%) translateX(-4px) scale(0.96);
+  transition: opacity 150ms ease, transform 150ms ease;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.dark .cy-sidebar-tooltip {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.group\/nav:hover > .cy-sidebar-tooltip,
+.group\/account:hover > .cy-sidebar-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Tooltip arrow */
+.cy-sidebar-tooltip::before {
+  content: '';
+  @apply absolute right-full top-1/2 -translate-y-1/2;
+  border: 5px solid transparent;
+  border-right-color: var(--border-default);
+}
+
+.cy-sidebar-tooltip::after {
+  content: '';
+  @apply absolute right-full top-1/2 -translate-y-1/2;
+  border: 4px solid transparent;
+  border-right-color: var(--bg-elevated);
+}
+
+/* ─── Account group switcher ─── */
+
+.cy-sidebar-account-btn {
+  @apply flex w-full items-center justify-between rounded-xl border px-3 py-2.5 cursor-pointer;
+  border-color: var(--border-default);
+  background-color: var(--bg-muted);
+  transition: all 200ms ease;
+}
+
+.cy-sidebar-account-btn:hover {
+  background-color: var(--interactive-hover);
+  border-color: var(--border-strong);
+}
+
+.cy-sidebar-account-btn-collapsed {
+  @apply justify-center border-none bg-transparent p-0;
+}
+
+.cy-sidebar-account-icon {
+  @apply flex size-10 items-center justify-center rounded-xl mx-auto;
+  border: 1px solid var(--border-default);
+  background-color: var(--bg-muted);
+  transition: all 200ms ease;
+}
+
+.cy-sidebar-account-icon:hover {
+  border-color: var(--border-strong);
+}
+
+.cy-sidebar-account-dropdown {
+  @apply absolute z-[70] overflow-hidden rounded-xl border;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  border-color: var(--border-default);
+  background-color: var(--bg-elevated);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+  animation: slideIn 200ms ease-out;
+}
+
+.dark .cy-sidebar-account-dropdown {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+}
+
+.cy-sidebar-account-dropdown-collapsed {
+  @apply fixed z-[60];
+  left: var(--cy-sidebar-width, 80px);
+  bottom: 4px;
+  margin-left: 0.5rem;
+  min-width: 200px;
+  right: auto;
+}
+
+.cy-sidebar-account-item {
+  @apply w-full rounded-lg px-2.5 py-2 text-left text-[13px] cursor-pointer;
+  color: var(--text-secondary);
+  transition: all 150ms ease;
+}
+
+.cy-sidebar-account-item:hover {
+  background-color: var(--interactive-hover);
+}
+
+.cy-sidebar-account-item-active {
+  @apply font-medium;
+  background: rgba(3, 155, 224, 0.12);
+  color: var(--color-primary-700);
+}
+
+.dark .cy-sidebar-account-item-active {
+  color: var(--text-brand);
+  background: rgba(34, 211, 238, 0.10);
+}
+
+/* ─── Sidebar footer ─── */
+
+.cy-sidebar-footer {
+  @apply relative border-t shrink-0;
+  border-color: var(--border-default);
+}
+
+/* Metric Cards */
+.cy-metric {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  @apply relative p-5 rounded-xl overflow-hidden;
+}
+
+.cy-metric::before {
+  content: '';
+  @apply absolute top-0 left-0 right-0 h-[2px] opacity-60;
+}
+
+.dark .cy-metric {
+  box-shadow: var(--shadow-card), 0 0 0 0.5px var(--border-default);
+}
+
+@media (width >= 1920px) {
+  .cy-btn-sm {
+    padding: 0.55rem 0.95rem;
+    font-size: 0.8125rem;
+  }
+
+  .cy-shell-brand-logo img {
+    transform: scale(1.05);
+    transform-origin: left center;
+  }
+
+  .cy-sidebar-nav {
+    padding-top: 1.125rem;
+    padding-bottom: 1.125rem;
+  }
+
+  .cy-sidebar-link {
+    gap: 0.875rem;
+    padding: 0.78rem 0.9rem;
+    font-size: 0.95rem;
+  }
+
+  .cy-sidebar-link-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .cy-sidebar-link-icon-container,
+  .cy-sidebar-account-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .cy-sidebar-account-btn {
+    padding: 0.8rem 0.95rem;
+  }
+
+  .cy-sidebar-account-item {
+    font-size: 0.875rem;
+  }
+
+  .cy-sidebar-tooltip {
+    font-size: 0.8125rem;
+  }
+
+  .cy-docs-main > div {
+    max-width: 1760px !important;
+    width: 100%;
+    margin-inline: auto !important;
+  }
+
+  .cy-docs-main article {
+    max-width: 72rem !important;
+    padding-left: 3rem !important;
+    padding-right: 3rem !important;
+  }
+
+  .cy-docs-main article h1 {
+    font-size: clamp(2.8rem, 2vw, 3.25rem) !important;
+  }
+
+  .cy-docs-main article h2 {
+    font-size: 1.65rem !important;
+  }
+
+  .cy-docs-main article h3 {
+    font-size: 1.1rem !important;
+  }
+
+  .cy-docs-main article p,
+  .cy-docs-main article li,
+  .cy-docs-main article td,
+  .cy-docs-main article th,
+  .cy-docs-main article dd {
+    font-size: 0.98rem;
+    line-height: 1.8;
+  }
+
+  .cy-docs-main article pre,
+  .cy-docs-main article code {
+    font-size: 0.95rem;
+  }
+
+  .cy-docs-main aside {
+    width: 18rem !important;
+    padding-left: 1.75rem !important;
+    padding-right: 1.75rem !important;
+  }
+
+  .cy-docs-main aside a {
+    font-size: 0.95rem !important;
+  }
+
+  .cy-docs-main aside p {
+    font-size: 0.75rem !important;
+  }
+}
+
+@media (width >= 2560px) {
+  .cy-docs-main > div {
+    max-width: 1920px !important;
+    width: 100%;
+    margin-inline: auto !important;
+  }
+
+  .cy-docs-main article {
+    max-width: 76rem !important;
+  }
+
+  .cy-docs-main aside {
+    width: 19rem !important;
+  }
+}
+
+.dark .cy-metric::before {
+  opacity: 0.85;
+}
+
+.cy-metric-blue::before {
+  @apply bg-gradient-to-r from-primary-500 to-primary-500/20;
+}
+
+.cy-metric-green::before {
+  @apply bg-gradient-to-r from-success-500 to-success-500/20;
+}
+
+.dark .cy-metric-green::before {
+  background: linear-gradient(90deg, var(--color-success-400), color-mix(in srgb, var(--color-success-400) 20%, transparent));
+}
+
+.cy-metric-amber::before {
+  @apply bg-gradient-to-r from-warning-500 to-warning-500/20;
+}
+
+.dark .cy-metric-amber::before {
+  background: linear-gradient(90deg, var(--color-warning-400), color-mix(in srgb, var(--color-warning-400) 20%, transparent));
+}
+
+.cy-metric-red::before {
+  @apply bg-gradient-to-r from-error-500 to-error-500/20;
+}
+
+.dark .cy-metric-red::before {
+  background: linear-gradient(90deg, var(--color-error-400), color-mix(in srgb, var(--color-error-400) 20%, transparent));
+}
+
+.cy-metric-purple::before {
+  @apply bg-gradient-to-r from-purple-500 to-purple-500/20;
+}
+
+/* Tables */
+.cy-table {
+  @apply w-full text-sm text-left;
+}
+
+.cy-table thead th {
+  color: var(--text-muted);
+  border-bottom-color: var(--border-default);
+  background-color: color-mix(in srgb, var(--bg-canvas) 72%, var(--bg-elevated) 28%);
+  @apply px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b;
+}
+
+.cy-table tbody td {
+  color: var(--text-secondary);
+  border-bottom-color: color-mix(in srgb, var(--border-default) 70%, transparent);
+  @apply px-4 py-3 border-b;
+}
+
+.cy-table tbody tr {
+  @apply transition-colors duration-150;
+}
+
+.cy-table tbody tr:hover {
+  background-color: var(--interactive-hover);
+}
+
+.cy-section-label {
+  color: var(--text-muted);
+  @apply text-xs font-semibold uppercase tracking-widest;
+}
+
+/* Brand-true progress bar — use instead of hardcoded blue Tailwind gradient */
+.cy-progress-primary {
+  background: linear-gradient(90deg, var(--color-primary-600), var(--color-primary-400));
+}
+
+.dark .cy-progress-primary {
+  background: linear-gradient(90deg, var(--color-primary-500), var(--color-info-400));
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-surface-300 dark:bg-surface-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-surface-400 dark:bg-surface-600;
+}
+
+/* Animations */
+.cy-animate-in {
+  @apply animate-[fadeIn_300ms_ease-out];
+}
+
+.cy-animate-slide {
+  @apply animate-[slideIn_250ms_ease-out];
+}
+
+.cy-pulse-dot {
+  @apply animate-pulse;
+}
+
+/* Utility */
+.cy-divider {
+  @apply h-[1px] bg-gradient-to-r from-transparent via-surface-200 dark:via-surface-700 to-transparent;
+}
+
+.cy-text-gradient {
+  color: var(--text-primary);
+}
+
+.cy-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── react-resizable (inlined — Turbopack can't @import from node_modules) ─── */
+.react-resizable {
+  position: relative;
+}
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+/* ─── react-grid-layout (inlined) ─── */
+.react-grid-layout {
+  position: relative;
+  transition: height 200ms ease;
+}
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top, width, height;
+}
+.react-grid-item img {
+  pointer-events: none;
+  user-select: none;
+}
+.react-grid-item.cssTransforms {
+  transition-property: transform, width, height;
+}
+.react-grid-item.resizing {
+  transition: none;
+  z-index: 1;
+  will-change: width, height;
+}
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+  will-change: transform;
+}
+.react-grid-item.dropping {
+  visibility: hidden;
+}
+.react-grid-item.react-grid-placeholder {
+  background: var(--color-primary-500, #0284c7);
+  opacity: 0.18;
+  transition-duration: 100ms;
+  z-index: 2;
+  border-radius: 12px;
+  user-select: none;
+}
+.react-grid-item > .react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+}
+.drag-handle {
+  cursor: grab;
+}
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Legacy utility bridge so dark-coded pages remain light/dark compatible while migration completes */
+@layer utilities {
+  .text-slate-100,
+  .text-slate-200,
+  .text-slate-300 { color: var(--text-primary) !important; }
+
+  .text-slate-400,
+  .text-slate-500,
+  .text-slate-600 { color: var(--text-muted) !important; }
+
+  .bg-slate-900,
+  .bg-slate-900\/60,
+  .bg-slate-900\/70,
+  .bg-slate-900\/80,
+  .bg-slate-800,
+  .bg-slate-800\/20,
+  .bg-slate-800\/30,
+  .bg-slate-800\/40,
+  .bg-slate-800\/50,
+  .bg-slate-800\/60,
+  .bg-\[rgb\(15_18_30\)\],
+  .bg-\[rgb\(10_12_22\)\],
+  .bg-\[rgb\(10_12_22\)\]\/80 {
+    background-color: color-mix(in srgb, var(--bg-elevated) 92%, var(--bg-muted) 8%) !important;
+  }
+
+  .border-slate-700,
+  .border-slate-700\/30,
+  .border-slate-700\/40,
+  .border-slate-700\/50,
+  .border-slate-700\/60,
+  .border-slate-800,
+  .border-slate-800\/40,
+  .border-slate-800\/50,
+  .border-slate-800\/60,
+  .border-slate-800\/70 {
+    border-color: var(--border-default) !important;
+  }
+
+  .hover\:bg-slate-800\/50:hover,
+  .hover\:bg-slate-800\/40:hover,
+  .hover\:bg-slate-800\/30:hover,
+  .hover\:bg-slate-700\/50:hover,
+  .hover\:bg-slate-700\/60:hover,
+  .hover\:bg-slate-800:hover {
+    background-color: var(--interactive-hover) !important;
+  }
+
+  .hover\:text-slate-200:hover,
+  .hover\:text-slate-300:hover,
+  .hover\:text-slate-400:hover {
+    color: var(--text-primary) !important;
+  }
+}

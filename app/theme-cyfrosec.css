@@ -1,0 +1,735 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Configure dark mode to use class strategy instead of media query */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Register Skeleton Themes (Keeping for compatibility but overriding colors) */
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton-react';
+/* @import '@skeletonlabs/skeleton/themes/cerberus'; - Removed to avoid conflicts with our custom theme */
+
+/* Enterprise Theme System */
+:root {
+    /* Brand Colors (from guideline screenshot) */
+    --brand-primary: #039be0;
+    --brand-primary-hover: #33afdf;
+    --brand-accent-orange: #fe904d;
+    --brand-accent-strong: #fe701a;
+    --brand-accent-soft: #feb080;
+    --brand-white: #ffffff;
+    --focus-ring-brand: color-mix(in srgb, var(--brand-primary-hover) 42%, transparent);
+
+    /* Primary Scale (Blue brand-led) */
+    --color-primary-50: #e6f5fb;
+    --color-primary-100: #ccebf7;
+    --color-primary-200: #99d7ef;
+    --color-primary-300: #66c3e7;
+    --color-primary-400: #33afdf;
+    --color-primary-500: #039be0;
+    --color-primary-600: #0278ae;
+    --color-primary-700: #026493;
+    --color-primary-800: #02527a;
+    --color-primary-900: #013f5d;
+    --color-primary-950: #012c41;
+
+    /* Secondary (Slate / Structure) */
+    --color-surface-50: #f8fafc;
+    --color-surface-100: #f1f5f9;
+    --color-surface-200: #e2e8f0;
+    --color-surface-300: #cbd5e1;
+    --color-surface-400: #94a3b8;
+    --color-surface-500: #64748b;
+    --color-surface-600: #475569;
+    --color-surface-700: #334155;
+    --color-surface-800: #1e293b;
+    --color-surface-900: #0f172a; /* Deep Navy Background */
+    --color-surface-950: #020617;
+
+    /* Success */
+    --color-success-400: #34d399;
+    --color-success-500: #10b981;
+    --color-success-600: #059669;
+
+    /* Error */
+    --color-error-400: #f87171;
+    --color-error-500: #ef4444;
+    --color-error-600: #dc2626;
+
+    /* Warning — true amber so it reads as caution, not accent-orange */
+    --color-warning-400: #fbbf24;
+    --color-warning-500: #f59e0b;
+    --color-warning-600: #d97706;
+
+    /* High severity — vivid orange (between warning amber and error red) */
+    --color-high-400: #fb923c;
+    --color-high-500: #f97316;
+    --color-high-600: #ea580c;
+
+    /* Info / secondary interactive */
+    --color-info-400: #22d3ee;
+    --color-info-500: #0ea5e9;
+
+    /* Severity tokens — single source of truth for compliance / findings UI */
+    --severity-critical: var(--color-error-500);
+    --severity-high: var(--color-high-500);
+    --severity-medium: var(--color-warning-500);
+    --severity-low: var(--color-success-500);
+    --severity-info: var(--color-info-500);
+    --severity-neutral: var(--text-muted);
+    
+    /* Semantic Tokens (Light) */
+    --bg-canvas: #f6f8fb;
+    --bg-elevated: #ffffff;
+    --bg-muted: #ecf2f6;
+    --text-primary: #0f172a;
+    --text-secondary: #1e293b;
+    --text-muted: #475569;
+    --text-inverse: #f8fafc;
+    --text-brand: var(--brand-primary);
+    --text-accent: #fe701a;
+    --border-default: #d4e0ea;
+    --border-strong: #bfd1e0;
+    --interactive-hover: rgba(15, 23, 42, 0.04);
+    --interactive-active: rgba(15, 23, 42, 0.08);
+    --focus-ring: var(--focus-ring-brand);
+    --shadow-card: 0 8px 20px rgba(15, 23, 42, 0.06);
+
+    /* Font Settings */
+    --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+.dark {
+    /* Deeper background layers for stronger visual hierarchy */
+    --bg-canvas: #030c1a;
+    --bg-elevated: #0a192f;
+    --bg-muted: #112240;
+
+    --text-primary: #e2e8f0;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-inverse: #0f172a;
+
+    /* More vibrant brand teal-cyan in dark mode — matches #039be0 family */
+    --text-brand: #22d3ee;
+    --text-accent: #feb080;
+
+    --border-default: rgba(100, 116, 139, 0.30);
+    --border-strong: rgba(148, 163, 184, 0.42);
+    --interactive-hover: rgba(148, 163, 184, 0.10);
+    --interactive-active: rgba(148, 163, 184, 0.16);
+    --focus-ring: color-mix(in srgb, #22d3ee 52%, transparent);
+
+    /* Severity tokens — dark variants pop better at lower contrast */
+    --severity-critical: var(--color-error-400);
+    --severity-high: var(--color-high-400);
+    --severity-medium: var(--color-warning-400);
+    --severity-low: var(--color-success-400);
+    --severity-info: var(--color-info-400);
+    --severity-neutral: var(--text-muted);
+
+    /* Richer shadow with faint brand tint for depth */
+    --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.60), 0 2px 8px rgba(34, 211, 238, 0.04);
+}
+
+/* Assistant scoped palette */
+.assistant-theme {
+    --assistant-bg: color-mix(in srgb, var(--bg-canvas) 92%, var(--color-primary-100) 8%);
+    --assistant-panel: var(--bg-elevated);
+    --assistant-panel-strong: color-mix(in srgb, var(--bg-elevated) 82%, var(--bg-muted) 18%);
+    --assistant-input: color-mix(in srgb, var(--bg-elevated) 86%, var(--bg-muted) 14%);
+    --assistant-border: color-mix(in srgb, var(--border-default) 88%, transparent);
+    --assistant-text: var(--text-primary);
+    --assistant-text-muted: var(--text-secondary);
+    --assistant-text-subtle: var(--text-muted);
+    --assistant-header: color-mix(in srgb, var(--bg-elevated) 84%, transparent);
+    --assistant-agent-surface: color-mix(in srgb, var(--bg-elevated) 94%, var(--color-primary-50) 6%);
+    --assistant-agent-rail: color-mix(in srgb, var(--bg-elevated) 86%, var(--bg-muted) 14%);
+    --assistant-agent-command: color-mix(in srgb, var(--color-surface-950) 92%, var(--color-primary-500) 8%);
+    --assistant-composer: color-mix(in srgb, var(--bg-elevated) 90%, var(--color-primary-50) 10%);
+    --assistant-shadow-soft: 0 18px 55px rgba(15, 23, 42, 0.12);
+    --assistant-shadow-strong: 0 24px 70px rgba(15, 23, 42, 0.18);
+    --assistant-approval-low: var(--color-success-500);
+    --assistant-approval-medium: var(--color-warning-500);
+    --assistant-approval-high: #f97316;
+    --assistant-approval-critical: var(--color-error-500);
+}
+
+.dark .assistant-theme {
+    --assistant-bg: color-mix(in srgb, var(--bg-canvas) 88%, #020c18 12%);
+    --assistant-panel: color-mix(in srgb, var(--bg-elevated) 88%, #020c18 12%);
+    --assistant-panel-strong: color-mix(in srgb, var(--bg-muted) 78%, #020c18 22%);
+    --assistant-input: color-mix(in srgb, var(--bg-muted) 86%, #020c18 14%);
+    --assistant-border: color-mix(in srgb, var(--border-default) 92%, transparent);
+    --assistant-text: var(--text-primary);
+    --assistant-text-muted: var(--text-secondary);
+    --assistant-text-subtle: var(--text-muted);
+    --assistant-header: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
+    --assistant-agent-surface: color-mix(in srgb, var(--bg-elevated) 74%, #020c18 26%);
+    --assistant-agent-rail: color-mix(in srgb, var(--bg-muted) 68%, #020c18 32%);
+    --assistant-agent-command: color-mix(in srgb, #020617 82%, var(--color-primary-950) 18%);
+    --assistant-composer: color-mix(in srgb, var(--bg-muted) 78%, #020c18 22%);
+    --assistant-shadow-soft: 0 22px 60px rgba(2, 6, 23, 0.45);
+    --assistant-shadow-strong: 0 30px 80px rgba(2, 6, 23, 0.58);
+    --assistant-approval-low: var(--color-success-400);
+    --assistant-approval-medium: var(--color-warning-400);
+    --assistant-approval-high: #fb923c;
+    --assistant-approval-critical: var(--color-error-400);
+}
+
+/* AI Insights scoped palette */
+:root {
+    --ai-insight-accent: #8b5cf6;
+    --ai-insight-accent-muted: color-mix(in srgb, var(--ai-insight-accent) 72%, var(--text-brand) 28%);
+    --ai-insight-accent-soft: color-mix(in srgb, var(--ai-insight-accent) 12%, var(--bg-elevated));
+    --ai-insight-accent-border: color-mix(in srgb, var(--ai-insight-accent) 24%, transparent);
+    --ai-insight-heading-strong: var(--text-primary);
+
+    --ai-insight-panel-bg: color-mix(in srgb, var(--bg-elevated) 90%, var(--bg-muted) 10%);
+    --ai-insight-panel-hover: color-mix(in srgb, var(--bg-elevated) 82%, var(--bg-muted) 18%);
+    --ai-insight-panel-active: color-mix(in srgb, var(--bg-elevated) 82%, var(--ai-insight-accent-soft) 18%);
+    --ai-insight-panel-border: color-mix(in srgb, var(--border-default) 88%, transparent);
+    --ai-insight-panel-divider: color-mix(in srgb, var(--border-default) 72%, transparent);
+    --ai-insight-pill-bg: color-mix(in srgb, var(--bg-muted) 62%, var(--bg-elevated) 38%);
+    --ai-insight-pill-border: color-mix(in srgb, var(--border-default) 88%, transparent);
+    --ai-insight-id-bg: color-mix(in srgb, var(--bg-muted) 72%, var(--bg-elevated) 28%);
+    --ai-insight-id-border: color-mix(in srgb, var(--border-default) 84%, transparent);
+    --ai-insight-id-text: color-mix(in srgb, var(--text-muted) 84%, var(--text-secondary) 16%);
+    --ai-insight-feedback-bg: color-mix(in srgb, var(--bg-muted) 68%, var(--bg-elevated) 32%);
+    --ai-insight-feedback-border: color-mix(in srgb, var(--border-default) 76%, transparent);
+    --ai-insight-feedback-hover: color-mix(in srgb, var(--bg-muted) 84%, var(--bg-elevated) 16%);
+
+    --ai-insight-summary-bg: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--ai-insight-accent) 14%, var(--bg-elevated)) 0%,
+        color-mix(in srgb, var(--bg-elevated) 66%, var(--bg-muted) 34%) 58%,
+        color-mix(in srgb, var(--bg-elevated) 48%, var(--bg-muted) 52%) 100%
+    );
+    --ai-insight-summary-border: color-mix(in srgb, var(--ai-insight-accent) 20%, var(--border-default) 80%);
+    --ai-insight-summary-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    --ai-insight-summary-icon-bg: color-mix(in srgb, var(--ai-insight-accent) 16%, var(--bg-elevated));
+    --ai-insight-summary-icon-border: color-mix(in srgb, var(--ai-insight-accent) 28%, transparent);
+    --ai-insight-summary-title: var(--text-primary);
+    --ai-insight-summary-text: var(--text-secondary);
+    --ai-insight-summary-link: color-mix(in srgb, var(--ai-insight-accent) 78%, var(--text-brand) 22%);
+    --ai-insight-summary-empty: color-mix(in srgb, var(--text-muted) 72%, transparent);
+
+    --ai-insight-risk-card-bg: color-mix(in srgb, var(--bg-elevated) 95%, var(--bg-muted) 5%);
+    --ai-insight-risk-card-hover: color-mix(in srgb, var(--bg-elevated) 88%, var(--bg-muted) 12%);
+    --ai-insight-risk-card-border: color-mix(in srgb, var(--border-default) 68%, transparent);
+    --ai-insight-risk-detail-bg: color-mix(in srgb, var(--bg-muted) 54%, var(--bg-elevated) 46%);
+    --ai-insight-risk-detail-border: color-mix(in srgb, var(--border-default) 68%, transparent);
+    --ai-insight-risk-divider: color-mix(in srgb, var(--border-default) 64%, transparent);
+    --ai-insight-meta-label: var(--text-muted);
+    --ai-insight-meta-value: var(--text-secondary);
+    --ai-insight-progress-track: color-mix(in srgb, var(--border-default) 80%, transparent);
+
+    --ai-insight-reasoning-bg: color-mix(in srgb, var(--ai-insight-accent) 8%, var(--bg-elevated));
+    --ai-insight-reasoning-border: color-mix(in srgb, var(--ai-insight-accent) 18%, var(--border-default) 82%);
+    --ai-insight-reasoning-title: color-mix(in srgb, var(--ai-insight-accent) 74%, var(--text-secondary) 26%);
+    --ai-insight-reasoning-text: var(--text-secondary);
+    --ai-insight-action-bg: color-mix(in srgb, var(--color-success-500) 8%, var(--bg-elevated));
+    --ai-insight-action-border: color-mix(in srgb, var(--color-success-500) 18%, var(--border-default) 82%);
+    --ai-insight-action-title: color-mix(in srgb, var(--color-success-600) 74%, var(--text-secondary) 26%);
+    --ai-insight-action-text: var(--text-secondary);
+    --ai-insight-evidence-bg: color-mix(in srgb, var(--bg-muted) 58%, var(--bg-elevated) 42%);
+    --ai-insight-evidence-border: color-mix(in srgb, var(--border-default) 68%, transparent);
+    --ai-insight-evidence-text: var(--text-muted);
+    --ai-insight-command-bg: color-mix(in srgb, var(--bg-muted) 44%, var(--bg-elevated) 56%);
+    --ai-insight-command-border: color-mix(in srgb, var(--border-default) 68%, transparent);
+    --ai-insight-command-header-bg: color-mix(in srgb, var(--bg-muted) 52%, var(--bg-elevated) 48%);
+    --ai-insight-command-header-border: color-mix(in srgb, var(--border-default) 68%, transparent);
+    --ai-insight-command-label: color-mix(in srgb, var(--color-info-500) 70%, var(--text-secondary) 30%);
+    --ai-insight-command-text: color-mix(in srgb, var(--color-info-500) 42%, var(--text-secondary) 58%);
+
+    --ai-insight-source-port-text: color-mix(in srgb, var(--color-info-500) 76%, var(--text-secondary) 24%);
+    --ai-insight-source-port-bg: color-mix(in srgb, var(--color-info-500) 12%, var(--bg-elevated));
+    --ai-insight-source-port-border: color-mix(in srgb, var(--color-info-500) 24%, transparent);
+    --ai-insight-source-asset-text: color-mix(in srgb, var(--text-brand) 72%, var(--text-secondary) 28%);
+    --ai-insight-source-asset-bg: color-mix(in srgb, var(--text-brand) 12%, var(--bg-elevated));
+    --ai-insight-source-asset-border: color-mix(in srgb, var(--text-brand) 24%, transparent);
+    --ai-insight-source-fingerprint-text: color-mix(in srgb, var(--ai-insight-accent) 78%, var(--text-secondary) 22%);
+    --ai-insight-source-fingerprint-bg: color-mix(in srgb, var(--ai-insight-accent) 12%, var(--bg-elevated));
+    --ai-insight-source-fingerprint-border: color-mix(in srgb, var(--ai-insight-accent) 24%, transparent);
+    --ai-insight-source-default-text: var(--text-muted);
+    --ai-insight-source-default-bg: color-mix(in srgb, var(--bg-muted) 70%, var(--bg-elevated) 30%);
+    --ai-insight-source-default-border: color-mix(in srgb, var(--border-default) 78%, transparent);
+
+    --ai-insight-exposure-exposed-text: var(--color-error-600);
+    --ai-insight-exposure-exposed-bg: color-mix(in srgb, var(--color-error-500) 18%, transparent);
+    --ai-insight-exposure-exposed-border: color-mix(in srgb, var(--color-error-500) 40%, transparent);
+    --ai-insight-exposure-local-text: var(--color-warning-600);
+    --ai-insight-exposure-local-bg: color-mix(in srgb, var(--color-warning-500) 18%, transparent);
+    --ai-insight-exposure-local-border: color-mix(in srgb, var(--color-warning-500) 40%, transparent);
+    --ai-insight-exposure-unconfirmed-text: var(--color-info-500);
+    --ai-insight-exposure-unconfirmed-bg: color-mix(in srgb, var(--color-info-500) 16%, transparent);
+    --ai-insight-exposure-unconfirmed-border: color-mix(in srgb, var(--color-info-500) 34%, transparent);
+    --ai-insight-exposure-default-text: var(--text-muted);
+    --ai-insight-exposure-default-bg: color-mix(in srgb, var(--bg-muted) 74%, var(--bg-elevated) 26%);
+    --ai-insight-exposure-default-border: color-mix(in srgb, var(--border-default) 80%, transparent);
+
+    --ai-insight-risk-critical-border: var(--color-error-500);
+    --ai-insight-risk-critical-bg: color-mix(in srgb, var(--color-error-500) 7%, transparent);
+    --ai-insight-risk-high-border: #f97316;
+    --ai-insight-risk-high-bg: rgba(249, 115, 22, 0.07);
+    --ai-insight-risk-medium-border: var(--color-warning-500);
+    --ai-insight-risk-medium-bg: color-mix(in srgb, var(--color-warning-500) 7%, transparent);
+    --ai-insight-risk-low-border: var(--color-info-500);
+    --ai-insight-risk-low-bg: color-mix(in srgb, var(--color-info-500) 7%, transparent);
+    --ai-insight-risk-default-border: var(--color-surface-500);
+    --ai-insight-risk-default-bg: rgba(100, 116, 139, 0.07);
+}
+
+.dark {
+    --ai-insight-accent: #a78bfa;
+    --ai-insight-accent-muted: rgba(167, 139, 250, 0.72);
+    --ai-insight-accent-soft: rgba(139, 92, 246, 0.10);
+    --ai-insight-accent-border: rgba(139, 92, 246, 0.22);
+    --ai-insight-heading-strong: #ffffff;
+
+    --ai-insight-panel-bg: rgba(15, 23, 42, 0.40);
+    --ai-insight-panel-hover: rgba(255, 255, 255, 0.04);
+    --ai-insight-panel-active: rgba(139, 92, 246, 0.08);
+    --ai-insight-panel-border: rgba(255, 255, 255, 0.08);
+    --ai-insight-panel-divider: rgba(255, 255, 255, 0.05);
+    --ai-insight-pill-bg: rgba(255, 255, 255, 0.05);
+    --ai-insight-pill-border: rgba(255, 255, 255, 0.10);
+    --ai-insight-id-bg: rgba(0, 0, 0, 0.20);
+    --ai-insight-id-border: rgba(255, 255, 255, 0.05);
+    --ai-insight-id-text: rgba(148, 163, 184, 0.85);
+    --ai-insight-feedback-bg: rgba(0, 0, 0, 0.10);
+    --ai-insight-feedback-border: rgba(255, 255, 255, 0.05);
+    --ai-insight-feedback-hover: rgba(255, 255, 255, 0.10);
+
+    --ai-insight-summary-bg: linear-gradient(135deg, rgba(76, 29, 149, 0.20) 0%, rgba(15, 23, 42, 0.40) 55%, rgba(0, 0, 0, 0.40) 100%);
+    --ai-insight-summary-border: rgba(139, 92, 246, 0.20);
+    --ai-insight-summary-shadow: 0 18px 40px rgba(139, 92, 246, 0.05);
+    --ai-insight-summary-icon-bg: rgba(139, 92, 246, 0.20);
+    --ai-insight-summary-icon-border: rgba(139, 92, 246, 0.30);
+    --ai-insight-summary-title: #ffffff;
+    --ai-insight-summary-text: #cbd5e1;
+    --ai-insight-summary-link: #a78bfa;
+    --ai-insight-summary-empty: rgba(255, 255, 255, 0.50);
+
+    --ai-insight-risk-card-bg: rgba(255, 255, 255, 0.02);
+    --ai-insight-risk-card-hover: rgba(255, 255, 255, 0.04);
+    --ai-insight-risk-card-border: rgba(255, 255, 255, 0.05);
+    --ai-insight-risk-detail-bg: rgba(0, 0, 0, 0.20);
+    --ai-insight-risk-detail-border: rgba(255, 255, 255, 0.05);
+    --ai-insight-risk-divider: rgba(255, 255, 255, 0.05);
+    --ai-insight-meta-label: rgba(148, 163, 184, 0.72);
+    --ai-insight-meta-value: #cbd5e1;
+    --ai-insight-progress-track: rgba(255, 255, 255, 0.10);
+
+    --ai-insight-reasoning-bg: rgba(139, 92, 246, 0.05);
+    --ai-insight-reasoning-border: rgba(139, 92, 246, 0.15);
+    --ai-insight-reasoning-title: #a78bfa;
+    --ai-insight-reasoning-text: #cbd5e1;
+    --ai-insight-action-bg: rgba(16, 185, 129, 0.05);
+    --ai-insight-action-border: rgba(16, 185, 129, 0.15);
+    --ai-insight-action-title: #34d399;
+    --ai-insight-action-text: rgba(209, 250, 229, 0.80);
+    --ai-insight-evidence-bg: rgba(0, 0, 0, 0.40);
+    --ai-insight-evidence-border: rgba(255, 255, 255, 0.05);
+    --ai-insight-evidence-text: #94a3b8;
+    --ai-insight-command-bg: rgba(0, 0, 0, 0.20);
+    --ai-insight-command-border: rgba(255, 255, 255, 0.05);
+    --ai-insight-command-header-bg: rgba(255, 255, 255, 0.03);
+    --ai-insight-command-header-border: rgba(255, 255, 255, 0.05);
+    --ai-insight-command-label: rgba(103, 232, 249, 0.80);
+    --ai-insight-command-text: rgba(165, 243, 252, 0.70);
+
+    --ai-insight-source-port-text: #60a5fa;
+    --ai-insight-source-port-bg: rgba(59, 130, 246, 0.10);
+    --ai-insight-source-port-border: rgba(59, 130, 246, 0.20);
+    --ai-insight-source-asset-text: #22d3ee;
+    --ai-insight-source-asset-bg: rgba(6, 182, 212, 0.10);
+    --ai-insight-source-asset-border: rgba(6, 182, 212, 0.20);
+    --ai-insight-source-fingerprint-text: #a78bfa;
+    --ai-insight-source-fingerprint-bg: rgba(139, 92, 246, 0.10);
+    --ai-insight-source-fingerprint-border: rgba(139, 92, 246, 0.20);
+    --ai-insight-source-default-text: #94a3b8;
+    --ai-insight-source-default-bg: rgba(255, 255, 255, 0.05);
+    --ai-insight-source-default-border: rgba(255, 255, 255, 0.10);
+
+    --ai-insight-exposure-exposed-text: #fca5a5;
+    --ai-insight-exposure-exposed-bg: rgba(239, 68, 68, 0.15);
+    --ai-insight-exposure-exposed-border: rgba(239, 68, 68, 0.30);
+    --ai-insight-exposure-local-text: #fcd34d;
+    --ai-insight-exposure-local-bg: rgba(245, 158, 11, 0.20);
+    --ai-insight-exposure-local-border: rgba(245, 158, 11, 0.30);
+    --ai-insight-exposure-unconfirmed-text: #93c5fd;
+    --ai-insight-exposure-unconfirmed-bg: rgba(59, 130, 246, 0.20);
+    --ai-insight-exposure-unconfirmed-border: rgba(59, 130, 246, 0.30);
+    --ai-insight-exposure-default-text: #94a3b8;
+    --ai-insight-exposure-default-bg: rgba(255, 255, 255, 0.05);
+    --ai-insight-exposure-default-border: rgba(255, 255, 255, 0.10);
+
+    --ai-insight-risk-critical-border: #ef4444;
+    --ai-insight-risk-critical-bg: rgba(239, 68, 68, 0.04);
+    --ai-insight-risk-high-border: #f97316;
+    --ai-insight-risk-high-bg: rgba(249, 115, 22, 0.04);
+    --ai-insight-risk-medium-border: #eab308;
+    --ai-insight-risk-medium-bg: rgba(234, 179, 8, 0.04);
+    --ai-insight-risk-low-border: #3b82f6;
+    --ai-insight-risk-low-bg: rgba(59, 130, 246, 0.04);
+    --ai-insight-risk-default-border: #64748b;
+    --ai-insight-risk-default-bg: rgba(100, 116, 139, 0.04);
+}
+
+/* Enterprise Utilities */
+@layer utilities {
+    .cy-bg-canvas {
+        background-color: var(--bg-canvas);
+    }
+
+    .cy-bg-elevated {
+        background-color: var(--bg-elevated);
+    }
+
+    .cy-bg-muted {
+        background-color: var(--bg-muted);
+    }
+
+    .cy-text-primary {
+        color: var(--text-primary);
+    }
+
+    .cy-text-secondary {
+        color: var(--text-secondary);
+    }
+
+    .cy-text-muted {
+        color: var(--text-muted);
+    }
+
+    .cy-text-brand {
+        color: var(--text-brand);
+    }
+
+    .cy-text-accent {
+        color: var(--text-accent);
+    }
+
+    .cy-border-default {
+        border-color: var(--border-default);
+    }
+
+    .cy-border-strong {
+        border-color: var(--border-strong);
+    }
+
+    .cy-border-brand {
+        border-color: color-mix(in srgb, var(--brand-primary) 38%, transparent);
+    }
+
+    .cy-bg-brand-soft {
+        background-color: color-mix(in srgb, var(--brand-primary) 12%, var(--bg-elevated));
+    }
+
+    .cy-bg-accent-soft {
+        background-color: color-mix(in srgb, var(--brand-accent-orange) 14%, var(--bg-elevated));
+    }
+
+    .cy-overlay-scrim {
+        background-color: color-mix(in srgb, var(--bg-canvas) 38%, #000 62%);
+    }
+
+    .glass-panel {
+        background-color: color-mix(in srgb, var(--bg-elevated) 78%, transparent);
+        border: 1px solid var(--border-default);
+        @apply backdrop-blur-md;
+    }
+    
+    .card-enterprise {
+        background-color: var(--bg-elevated);
+        border: 1px solid var(--border-default);
+        box-shadow: var(--shadow-card);
+        @apply rounded-xl transition-shadow duration-200;
+    }
+
+    .cy-assistant-bg {
+        background-color: var(--assistant-bg);
+    }
+
+    .cy-assistant-panel {
+        background-color: var(--assistant-panel);
+    }
+
+    .cy-assistant-panel-strong {
+        background-color: var(--assistant-panel-strong);
+    }
+
+    .cy-assistant-input {
+        background-color: var(--assistant-input);
+    }
+
+    .cy-assistant-border {
+        border-color: var(--assistant-border);
+    }
+
+    .cy-assistant-text {
+        color: var(--assistant-text);
+    }
+
+    .cy-assistant-text-muted {
+        color: var(--assistant-text-muted);
+    }
+
+    .cy-assistant-text-subtle {
+        color: var(--assistant-text-subtle);
+    }
+
+    .cy-assistant-header {
+        background-color: var(--assistant-header);
+    }
+
+    .cy-assistant-agent-surface {
+        background-color: var(--assistant-agent-surface);
+        box-shadow: var(--assistant-shadow-soft);
+    }
+
+    .cy-assistant-agent-rail {
+        background-color: var(--assistant-agent-rail);
+    }
+
+    .cy-assistant-command-surface {
+        background-color: var(--assistant-agent-command);
+    }
+
+    .cy-assistant-composer {
+        background-color: var(--assistant-composer);
+        box-shadow: var(--assistant-shadow-strong);
+    }
+
+    .cy-assistant-focus {
+        outline: none;
+    }
+
+    .cy-assistant-focus:focus-visible {
+        box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+
+    .cy-assistant-scroll-fade {
+        background: linear-gradient(
+            180deg,
+            transparent 0%,
+            color-mix(in srgb, var(--assistant-bg) 70%, transparent) 42%,
+            var(--assistant-bg) 100%
+        );
+    }
+
+    .cy-assistant-markdown {
+        color: var(--assistant-text-muted);
+    }
+
+    .cy-assistant-markdown :where(pre) {
+        background-color: var(--assistant-agent-command);
+    }
+
+    .cy-assistant-risk-low {
+        --assistant-risk-color: var(--assistant-approval-low);
+    }
+
+    .cy-assistant-risk-medium {
+        --assistant-risk-color: var(--assistant-approval-medium);
+    }
+
+    .cy-assistant-risk-high {
+        --assistant-risk-color: var(--assistant-approval-high);
+    }
+
+    .cy-assistant-risk-critical {
+        --assistant-risk-color: var(--assistant-approval-critical);
+    }
+
+    .cy-assistant-risk-border {
+        border-color: color-mix(in srgb, var(--assistant-risk-color) 36%, var(--assistant-border));
+    }
+
+    .cy-assistant-risk-bg {
+        background-color: color-mix(in srgb, var(--assistant-risk-color) 12%, transparent);
+    }
+
+    .cy-assistant-risk-text {
+        color: var(--assistant-risk-color);
+    }
+
+    .cy-assistant-toggle-pill {
+        min-height: 2.25rem;
+        min-width: 2.25rem;
+        border-radius: 9999px;
+        border: 1px solid var(--assistant-border);
+        background: color-mix(in srgb, var(--assistant-input) 90%, transparent);
+        color: var(--assistant-text-subtle);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+        @apply inline-flex items-center justify-center transition-all duration-200 ease-out;
+    }
+
+    .cy-assistant-toggle-pill:hover {
+        background: color-mix(in srgb, var(--assistant-panel-strong) 85%, transparent);
+        color: var(--assistant-text);
+        transform: translateY(-1px);
+    }
+
+    .cy-assistant-toggle-pill:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 14px rgba(15, 23, 42, 0.12);
+    }
+
+    .cy-assistant-toggle-pill:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--focus-ring), 0 8px 20px rgba(15, 23, 42, 0.12);
+    }
+
+    .dark .cy-assistant-toggle-pill {
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.45);
+    }
+
+    .dark .cy-assistant-toggle-pill:active {
+        box-shadow: 0 6px 16px rgba(2, 6, 23, 0.5);
+    }
+
+    .dark .cy-assistant-toggle-pill:focus-visible {
+        box-shadow: 0 0 0 3px var(--focus-ring), 0 10px 24px rgba(2, 6, 23, 0.45);
+    }
+
+    .cy-ai-panel {
+        background-color: var(--ai-insight-panel-bg);
+        border-color: var(--ai-insight-panel-border);
+    }
+
+    .cy-ai-panel-active {
+        background-color: var(--ai-insight-panel-active);
+    }
+
+    .cy-ai-pill {
+        background-color: var(--ai-insight-pill-bg);
+        border-color: var(--ai-insight-pill-border);
+    }
+
+    .cy-ai-id-pill {
+        background-color: var(--ai-insight-id-bg);
+        border-color: var(--ai-insight-id-border);
+        color: var(--ai-insight-id-text);
+    }
+
+    .cy-ai-feedback {
+        background-color: var(--ai-insight-feedback-bg);
+        border-color: var(--ai-insight-feedback-border);
+    }
+
+    .cy-ai-summary-card {
+        background: var(--ai-insight-summary-bg);
+        border-color: var(--ai-insight-summary-border);
+        box-shadow: var(--ai-insight-summary-shadow);
+    }
+
+    .cy-ai-summary-icon {
+        background-color: var(--ai-insight-summary-icon-bg);
+        box-shadow: inset 0 0 0 1px var(--ai-insight-summary-icon-border);
+        color: var(--ai-insight-summary-link);
+    }
+
+    .cy-ai-accent-shell {
+        background-color: var(--ai-insight-accent-soft);
+        border-color: var(--ai-insight-accent-border);
+        color: var(--ai-insight-accent);
+        box-shadow: inset 0 0 14px color-mix(in srgb, var(--ai-insight-accent) 10%, transparent);
+    }
+
+    .cy-ai-active-indicator {
+        background-color: var(--ai-insight-accent);
+        box-shadow: 0 0 8px color-mix(in srgb, var(--ai-insight-accent) 68%, transparent);
+    }
+
+    .cy-ai-detail-panel {
+        background-color: var(--ai-insight-risk-detail-bg);
+        border-color: var(--ai-insight-risk-detail-border);
+    }
+
+    .cy-ai-reasoning-panel {
+        background-color: var(--ai-insight-reasoning-bg);
+        border-color: var(--ai-insight-reasoning-border);
+    }
+
+    .cy-ai-action-panel {
+        background-color: var(--ai-insight-action-bg);
+        border-color: var(--ai-insight-action-border);
+    }
+
+    .cy-ai-evidence-panel {
+        background-color: var(--ai-insight-evidence-bg);
+        border-color: var(--ai-insight-evidence-border);
+        color: var(--ai-insight-evidence-text);
+    }
+
+    .cy-ai-command-panel {
+        background-color: var(--ai-insight-command-bg);
+        border-color: var(--ai-insight-command-border);
+    }
+
+    .cy-ai-command-header {
+        background-color: var(--ai-insight-command-header-bg);
+        border-color: var(--ai-insight-command-header-border);
+    }
+
+    /* ─── Severity utilities (compliance + findings UI) ─────────────── */
+    .cy-severity-critical { --severity: var(--severity-critical); }
+    .cy-severity-high     { --severity: var(--severity-high); }
+    .cy-severity-medium   { --severity: var(--severity-medium); }
+    .cy-severity-low      { --severity: var(--severity-low); }
+    .cy-severity-info     { --severity: var(--severity-info); }
+    .cy-severity-neutral  { --severity: var(--severity-neutral); }
+
+    .cy-text-severity {
+        color: var(--severity, var(--text-muted));
+    }
+
+    .cy-bg-severity-soft {
+        background-color: color-mix(in srgb, var(--severity, var(--text-muted)) 10%, transparent);
+    }
+
+    .cy-bg-severity-strong {
+        background-color: color-mix(in srgb, var(--severity, var(--text-muted)) 18%, transparent);
+    }
+
+    .cy-bg-severity-solid {
+        background-color: var(--severity, var(--text-muted));
+    }
+
+    .cy-border-severity {
+        border-color: color-mix(in srgb, var(--severity, var(--border-default)) 30%, var(--border-default));
+    }
+
+    .cy-border-severity-strong {
+        border-color: color-mix(in srgb, var(--severity, var(--border-default)) 55%, transparent);
+    }
+
+    .cy-ring-severity {
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--severity, var(--border-default)) 18%, transparent);
+    }
+
+    /* ─── Compliance-page surfaces ──────────────────────────────────── */
+    .cy-compliance-hero {
+        background:
+            linear-gradient(
+                135deg,
+                color-mix(in srgb, var(--severity, var(--brand-primary)) 14%, var(--bg-elevated)) 0%,
+                color-mix(in srgb, var(--bg-elevated) 92%, var(--bg-muted) 8%) 70%
+            );
+        border: 1px solid color-mix(in srgb, var(--severity, var(--border-default)) 28%, var(--border-default) 72%);
+        box-shadow: var(--shadow-card);
+    }
+
+    .cy-compliance-stat {
+        background-color: color-mix(in srgb, var(--bg-elevated) 90%, var(--bg-muted) 10%);
+        border: 1px solid var(--border-default);
+    }
+
+    .cy-compliance-score-badge {
+        background-color: color-mix(in srgb, var(--severity, var(--brand-primary)) 14%, var(--bg-elevated));
+        border: 1px solid color-mix(in srgb, var(--severity, var(--border-default)) 35%, transparent);
+        color: var(--severity, var(--text-primary));
+    }
+}

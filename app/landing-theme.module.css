@@ -1,0 +1,380 @@
+/*
+ * Landing page token scope.
+ * Keep the CyfroSec landing palette local to the marketing page so the
+ * product app theme remains untouched.
+ *
+ * Theme switching uses the existing `.dark` class on <html> (set before first
+ * paint by the bootstrap script in app/layout.tsx). Light values live on
+ * `.wrapper`; dark values override them under `.dark .wrapper`. Components
+ * consume these through the `lp-*` Tailwind colours registered in
+ * app/globals.css, or through the `lp-*` component classes below.
+ *
+ * Contrast notes (WCAG 2.2 AA, verified pair by pair):
+ * - White text on #039be0 is 3.1:1, so CTAs put navy text (#0d1b29, 5.6:1) on
+ *   brand blue in both themes.
+ * - Brand blue and orange fail as text on light surfaces, so light text uses
+ *   #0870ad (blue) and #b3500d (orange). The raw brand colours stay for fills.
+ * - Light muted text and links are a step darker than the brief (#566b80,
+ *   #0870ad) so they still pass on the #eaf3fa alternate section.
+ */
+
+.wrapper {
+  /* Brand — identical in both themes */
+  --brand-primary: #039be0;
+  --brand-primary-hover: #33afdf;
+  --brand-accent-orange: #fe904d;
+  --brand-accent-strong: #fe701a;
+  --brand-accent-soft: #feb080;
+  --brand-accent-rgb: 254 144 77;
+  --brand-white: #ffffff;
+
+  /* Primary scale */
+  --color-primary-50: #e6f5fb;
+  --color-primary-100: #ccebf7;
+  --color-primary-200: #99d7ef;
+  --color-primary-300: #66c3e7;
+  --color-primary-400: #33afdf;
+  --color-primary-500: #039be0;
+  --color-primary-600: #0278ae;
+  --color-primary-700: #026493;
+  --color-primary-800: #02527a;
+  --color-primary-900: #013f5d;
+  --color-primary-950: #012c41;
+
+  /* Surface scale (kept for pages that still use surface-* utilities) */
+  --color-surface-50: #f7fafc;
+  --color-surface-100: #edf3f8;
+  --color-surface-200: #dbe6ef;
+  --color-surface-300: #c1d2df;
+  --color-surface-400: #8ea4b7;
+  --color-surface-500: #627990;
+  --color-surface-600: #4b6074;
+  --color-surface-700: #34475a;
+  --color-surface-800: #243648;
+  --color-surface-900: #172737;
+  --color-surface-950: #0d1b29;
+
+  /* Status */
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-warning-500: #fe904d;
+
+  /* ── Semantic: surfaces (light) ── */
+  --bg-canvas: #f7fafc;
+  --bg-elevated: #ffffff;            /* primary surface */
+  --bg-surface-secondary: #f2f6fb;
+  --bg-section-alt: #eaf3fa;
+  --bg-muted: #f2f6fb;
+  --bg-panel: #ffffff;
+  --bg-panel-muted: #f2f6fb;
+  --bg-panel-strong: #eaf3fa;
+  --bg-overlay: #0d1b29;
+  --bg-input: #ffffff;
+  --bg-sidebar: #ffffff;             /* footer */
+  --bg-sidebar-hover: var(--bg-surface-secondary);
+
+
+  /* ── Semantic: text (light) ── */
+  --text-primary: #0f1f2f;           /* headings */
+  --text-body: #40576b;
+  --text-secondary: #40576b;
+  --text-muted: #566b80;             /* brief: #5d7388 — 4.38:1 on alt section */
+  --text-inverse: #ffffff;
+  --text-brand: #0870ad;             /* blue as text; #039be0 is 3.1:1 on white */
+  --text-link: #0870ad;              /* brief: #0876b5 — 4.38:1 on alt section */
+  --text-link-hover: #065a8a;
+  --text-accent: #b3500d;            /* orange as text */
+  --text-sidebar: var(--text-body);
+  --text-sidebar-muted: var(--text-muted);
+  --text-sidebar-strong: var(--text-primary);
+
+  /* ── Semantic: accents (light) ── */
+  --accent-emphasis: #fe701a;        /* fills and markers, never body text */
+  --accent-emphasis-text: #b3500d;
+  --accent-emphasis-bg: #fff1e6;
+  --cta-bg: #0278ae;                 /* small solid-blue elements: white text 4.9:1 */
+  --cta-bg-hover: #026493;           /* white text 6.5:1 */
+  --cta-text: #ffffff;
+  /* Large primary buttons: exact logo blue with white text. 3.1:1 passes AA only
+     because .lp-btn-primary text is large bold (19px / 700). */
+  --btn-primary-bg: #039be0;
+  --btn-primary-bg-hover: #0278ae;   /* white text 4.9:1 */
+  --btn-primary-text: #ffffff;
+  --hero-eyebrow: var(--text-primary);
+  --hero-headline: #039be0;          /* large bold text only: 3.1:1 on the white hero */
+  --icon-bg: #e6f5fb;
+  --icon-fg: #0870ad;
+  --severity-critical-text: #dc2626;
+  --status-success-text: #047857;
+
+  /* ── Semantic: borders, focus, elevation (light) ── */
+  --border-default: #dbe6ef;
+  --border-hover: #c1d2df;
+  --border-strong: #6b8196;          /* interactive outlines, ≥3:1 on every light surface */
+  --border-sidebar: var(--border-default);
+  --focus-ring-color: #0870ad;
+  --focus-ring: color-mix(in srgb, var(--focus-ring-color) 45%, transparent);
+  --shadow-card: 0 1px 2px rgb(15 31 47 / 0.05), 0 4px 16px rgb(15 31 47 / 0.05);
+  --shadow-raised: 0 12px 32px rgb(15 31 47 / 0.10);
+
+  /* Card and inset surfaces used inside homepage sections */
+  --lp-card: var(--bg-elevated);
+  --lp-inset: var(--bg-surface-secondary);
+
+  --shell-duration: 260ms;
+  --shell-easing: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Landing shell surfaces — top (unscrolled) navbar sits on the page background */
+  --hero-bg: var(--page-background);
+  --landing-navbar-border: var(--border-default);
+  --landing-navbar-divider: var(--border-default);
+  --landing-navbar-button-bg: var(--bg-elevated);
+  --landing-navbar-button-border: var(--border-default);
+  --landing-navbar-hover-bg: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  --landing-navbar-scrolled-bg: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
+  --landing-navbar-dropdown-bg: var(--bg-elevated);
+  --landing-navbar-dropdown-border: var(--border-default);
+  --landing-navbar-dropdown-shadow: var(--shadow-raised);
+  --landing-navbar-dropdown-label: var(--text-muted);
+  --landing-navbar-dropdown-title: var(--accent-emphasis-text);
+  --landing-navbar-dropdown-desc: var(--text-body);
+  --landing-navbar-dropdown-desc-hover: var(--text-body);
+  --landing-navbar-dropdown-icon-bg: var(--icon-bg);
+  --landing-navbar-dropdown-icon-border: var(--border-default);
+  --landing-navbar-dropdown-icon-text: var(--icon-fg);
+  --landing-navbar-dropdown-item-hover-bg: var(--bg-surface-secondary);
+  --landing-navbar-link-hover: var(--text-link);
+}
+
+
+/*
+ * Dark theme — designed separately, not an inversion of light.
+ * Applied when <html> carries the `dark` class.
+ */
+:global(.dark) .wrapper,
+:global(.dark).wrapper {
+  /* Surfaces */
+  --bg-canvas: #0d1b29;
+  --bg-elevated: #172737;            /* primary surface */
+  --bg-surface-secondary: #243648;
+  --bg-section-alt: #102b40;
+  --bg-muted: #243648;
+  --bg-panel: #172737;
+  --bg-panel-muted: #0d1b29;
+  --bg-panel-strong: #243648;
+  --bg-input: #243648;
+  --bg-sidebar: var(--bg-canvas);    /* footer */
+
+  --hero-bg: var(--page-background);
+  --hero-eyebrow: var(--text-brand);
+  --hero-headline: var(--text-primary);
+
+  /* Text */
+  --text-primary: #e9f1f8;
+  --text-body: #c4d4e2;
+  --text-secondary: #c4d4e2;
+  --text-muted: #8ea4b7;
+  --text-brand: #33afdf;             /* #039be0 drops to 4.0:1 on #243648 */
+  --text-link: #33afdf;
+  --text-link-hover: #66c3e7;
+  --text-accent: #fe904d;
+  --text-sidebar: var(--text-body);
+  --text-sidebar-muted: var(--text-muted);
+  --text-sidebar-strong: var(--text-primary);
+
+  /* Accents */
+  --accent-emphasis: #fe904d;
+  --accent-emphasis-text: #fe904d;
+  --accent-emphasis-bg: #3b2a20;
+  --cta-bg: #039be0;
+  --cta-bg-hover: #33afdf;
+  --cta-text: #0d1b29;
+  --btn-primary-bg: var(--cta-bg);
+  --btn-primary-bg-hover: var(--cta-bg-hover);
+  --btn-primary-text: var(--cta-text);
+  --icon-bg: #143a52;
+  --icon-fg: #33afdf;
+  --severity-critical-text: #fca5a5;
+  --status-success-text: #34d399;
+
+  /* Borders, focus, elevation */
+  --border-default: #365169;
+  --border-hover: #4a6680;
+  --border-strong: #6a8aa6;          /* interactive outlines, ≥3:1 on every dark surface */
+  --border-sidebar: var(--border-default);
+  --focus-ring-color: #33afdf;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.25);
+  --shadow-raised: 0 16px 40px rgb(0 0 0 / 0.40);
+
+  /* Landing shell surfaces */
+  --landing-navbar-border: color-mix(in srgb, var(--border-default) 25%, transparent);
+  --landing-navbar-divider: var(--border-default);
+  --landing-navbar-button-bg: var(--bg-elevated);
+  --landing-navbar-button-border: var(--border-default);
+  --landing-navbar-hover-bg: rgb(255 255 255 / 0.06);
+  --landing-navbar-scrolled-bg: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
+  --landing-navbar-dropdown-bg: var(--bg-elevated);
+  --landing-navbar-dropdown-border: var(--border-default);
+  --landing-navbar-dropdown-shadow: var(--shadow-raised);
+  --landing-navbar-dropdown-label: var(--text-muted);
+  --landing-navbar-dropdown-title: var(--accent-emphasis-text);
+  --landing-navbar-dropdown-desc: var(--text-body);
+  --landing-navbar-dropdown-desc-hover: var(--text-primary);
+  --landing-navbar-dropdown-icon-bg: var(--icon-bg);
+  --landing-navbar-dropdown-icon-border: var(--border-default);
+  --landing-navbar-dropdown-icon-text: var(--icon-fg);
+  --landing-navbar-dropdown-item-hover-bg: var(--bg-surface-secondary);
+  --landing-navbar-link-hover: var(--text-link);
+}
+
+
+/*
+ * Section rhythm. Sections alternate between the canvas and the alternate
+ * colour so neighbouring navy shades never touch. Cards re-point to keep
+ * clear separation from whichever section they sit on.
+ */
+.wrapper :global(.lp-section),
+.wrapper :global(.lp-section-alt),
+.wrapper :global(.lp-hero),
+.wrapper :global(.lp-cta-band) {
+  background-color: var(--page-background);
+}
+
+/* Cards: surface contrast, border and spacing instead of coloured glows */
+.wrapper :global(.lp-card) {
+  background-color: var(--lp-card);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-card);
+}
+
+/* Icon tile used by feature, persona and capability lists */
+.wrapper :global(.lp-icon-tile) {
+  background-color: var(--icon-bg);
+  color: var(--icon-fg);
+  /* keeps the tile visible on the pale-blue alternate section */
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--icon-fg) 20%, transparent);
+}
+
+/* Neutral eyebrow / label pill — replaces the blue badge pills */
+.wrapper :global(.lp-eyebrow) {
+  border: 1px solid var(--border-default);
+  background-color: var(--lp-card);
+  color: var(--text-body);
+}
+
+/* Orange emphasis pill — reserved for attention-worthy moments */
+.wrapper :global(.lp-emphasis) {
+  border: 1px solid color-mix(in srgb, var(--accent-emphasis) 45%, transparent);
+  background-color: var(--accent-emphasis-bg);
+  color: var(--accent-emphasis-text);
+}
+
+/* Primary CTA: logo blue. Label is large bold text (19px / 700, same in both
+   themes so toggling never resizes the button); in light mode that is what lets
+   white text on #039be0 meet WCAG AA. */
+.wrapper :global(.lp-btn-primary) {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  transition: background-color 200ms ease, transform 200ms ease;
+}
+.wrapper :global(.lp-btn-primary:hover) {
+  background-color: var(--btn-primary-bg-hover);
+}
+.wrapper :global(.lp-btn-primary:active) {
+  transform: translateY(1px);
+}
+
+/* Visible keyboard focus everywhere inside the landing shell.
+   Unlayered, so it wins over Tailwind's layered `focus-visible:outline-none`. */
+.wrapper :global(:focus-visible) {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+/* `cy-border` is used by the header but was never defined, so borders fell back
+   to currentColor (a bright white outline on the scrolled navbar in dark mode). */
+.wrapper :global(.cy-border) {
+  border-color: var(--border-default);
+}
+
+.wrapper :global(.cy-navbar-actions > button),
+.wrapper :global(.cy-navbar-mobile-toggle > button:first-child) {
+  border-color: var(--landing-navbar-button-border) !important;
+  background-color: var(--landing-navbar-button-bg) !important;
+}
+
+/* Scrolled navbar pill: near-opaque surface instead of a transparent blur, so
+   link text keeps its contrast over any section underneath. */
+.wrapper :global(.cy-navbar-shell.cy-navbar-shell-scrolled) {
+  background-color: var(--landing-navbar-scrolled-bg) !important;
+}
+
+/* Top (unscrolled) navbar: subtle bottom border. Dark keeps its previous 25% mix. */
+.wrapper :global(.cy-navbar-shell:not(.cy-navbar-shell-scrolled)) {
+  border-bottom-color: var(--landing-navbar-border);
+}
+
+/* Global CSS turns nav links --text-inverse (white) on hover, which made them
+   vanish in light mode. Use the theme's link colour instead. */
+.wrapper :global(.cy-navbar-nav .cy-navbar-link:hover),
+.wrapper :global(.cy-navbar-actions .cy-navbar-ghost:hover),
+.wrapper :global(.cy-navbar-mobile-toggle .cy-navbar-ghost:hover) {
+  color: var(--landing-navbar-link-hover) !important;
+}
+
+.wrapper :global(.cy-navbar-nav .cy-navbar-hover-bg) {
+  background-color: var(--landing-navbar-hover-bg) !important;
+}
+
+.wrapper :global(.cy-navbar-dropdown) {
+  background-color: var(--landing-navbar-dropdown-bg) !important;
+  border-color: var(--landing-navbar-dropdown-border) !important;
+  box-shadow: var(--landing-navbar-dropdown-shadow) !important;
+}
+
+.wrapper :global(.cy-navbar-dropdown-label) {
+  color: var(--landing-navbar-dropdown-label) !important;
+}
+
+.wrapper :global(.cy-navbar-dropdown-title) {
+  color: var(--landing-navbar-dropdown-title) !important;
+}
+
+.wrapper :global(.cy-navbar-dropdown-desc) {
+  color: var(--landing-navbar-dropdown-desc) !important;
+}
+
+.wrapper :global(.cy-navbar-dropdown-icon) {
+  background-color: var(--landing-navbar-dropdown-icon-bg) !important;
+  border-color: var(--landing-navbar-dropdown-icon-border) !important;
+  color: var(--landing-navbar-dropdown-icon-text) !important;
+}
+
+.wrapper :global(.cy-navbar-dropdown-item:hover),
+.wrapper :global(.cy-navbar-dropdown-item:focus-visible),
+.wrapper :global(.cy-navbar-dropdown-item[data-active="true"]) {
+  background-color: var(--landing-navbar-dropdown-item-hover-bg) !important;
+}
+
+.wrapper :global(.cy-navbar-dropdown-item:hover .cy-navbar-dropdown-title),
+.wrapper :global(.cy-navbar-dropdown-item:focus-visible .cy-navbar-dropdown-title) {
+  color: var(--landing-navbar-dropdown-title) !important;
+}
+
+.wrapper :global(.cy-navbar-dropdown-item:hover .cy-navbar-dropdown-desc),
+.wrapper :global(.cy-navbar-dropdown-item:focus-visible .cy-navbar-dropdown-desc) {
+  color: var(--landing-navbar-dropdown-desc-hover) !important;
+}
+
+/*
+ * Sidebar utility classes — missing from the app's global CSS.
+ */
+:global(.cy-bg-sidebar)          { background-color: var(--bg-sidebar); }
+:global(.cy-text-sidebar)        { color: var(--text-sidebar); }
+:global(.cy-text-sidebar-muted)  { color: var(--text-sidebar-muted); }
+:global(.cy-text-sidebar-strong) { color: var(--text-sidebar-strong); }
+:global(.cy-border-sidebar)      { border-color: var(--border-sidebar); }
